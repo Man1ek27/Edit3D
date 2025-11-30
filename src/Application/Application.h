@@ -23,5 +23,6 @@ private:
     sf::RenderWindow console_window;
 
     Console console;
+
     Renderer3D renderer3D; // Dodany renderer 3D
 };

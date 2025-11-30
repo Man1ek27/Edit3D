@@ -1,12 +1,12 @@
 #include "Application.h"
 
 
-Application::Application() : Application(1200, 800, "Edit3D") {
+Application::Application() : Application(1920, 1280, "Edit3D") {
 }
 
 Application::Application(unsigned int width, unsigned int height, sf::String title)
     : WINDOW_WIDTH{ width }, WINDOW_HEIGHT{ height }, WINDOW_TITLE{ title },
-    main_window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), WINDOW_TITLE)/*,
+    main_window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close)/*,
     console_window(sf::VideoMode({ 1200, 200 }), "Consola")*/ {
         //COMMENT: wyrzuci³em console_window bo nie jest narazie potrzebne
 
@@ -26,7 +26,7 @@ void Application::handleEvents() {
     }
 }
 
-void Application::run() {
+void Application::run() { // nominalnie w Application nie chcemy "suchego kodu" tylko ¿eby by³o tworzenie instancji obiektów i wywo³anie ich metod - Maniek
     sf::Clock deltaClock;
 
     while (main_window.isOpen()) {
@@ -43,15 +43,16 @@ void Application::run() {
         ImGui::SetNextWindowPos(ImVec2(700, 50), ImGuiCond_FirstUseEver);
 
         ImGui::Begin("Kontrola 3D");
-        ImGui::SliderFloat("Obrot X", &renderer3D.rotationX, 0.0f, 360.0f);
-        ImGui::SliderFloat("Obrot Y", &renderer3D.rotationY, 0.0f, 360.0f);
-        ImGui::SliderFloat("Powiekszenie", &renderer3D.zoom, 0.1f, 3.0f);
-        if (ImGui::Button("Resetuj widok")) {
-            renderer3D.rotationX = 0.0f;
-            renderer3D.rotationY = 0.0f;
-            renderer3D.zoom = 1.0f;
-        }
+            ImGui::SliderFloat("Obrot X", &renderer3D.rotationX, 0.0f, 360.0f); // czytelny format z wcieciem - Maniek
+            ImGui::SliderFloat("Obrot Y", &renderer3D.rotationY, 0.0f, 360.0f);
+            ImGui::SliderFloat("Powiekszenie", &renderer3D.zoom, 0.1f, 3.0f);
+            if (ImGui::Button("Resetuj widok")) {
+                renderer3D.rotationX = 0.0f;
+                renderer3D.rotationY = 0.0f;
+                renderer3D.zoom = 1.0f;
+            }
         ImGui::End();
+
 
         console.Draw();
 
@@ -60,3 +61,5 @@ void Application::run() {
     }
     ImGui::SFML::Shutdown();
 }
+
+

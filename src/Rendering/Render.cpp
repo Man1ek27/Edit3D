@@ -1,7 +1,18 @@
 #include "Render.h"
 
 Renderer3D::Renderer3D()
-    : rotationX(0.0f), rotationY(0.0f), zoom(1.0f), viewportSize(ImVec2(400, 400)) {
+    : rotationX(45.0f), rotationY(45.0f), zoom(1.0f), viewportSize(ImVec2(400, 400)),
+
+    // inicjalizacja views
+    views{ {
+            // Kolejnoœæ i liczba elementów MUSI zgadzaæ siê z rozmiarem 4
+            { 90.0f, 0.0f, "Widok Gora" },
+            { 0.0f, 90.0f, "Widok Bok" },
+            { 0.0f, 0.0f, "Widok Przod" },
+            { rotationX, rotationY, "Widok Perspektywa" }
+          } } {
+
+
     // Inicjalizacja wierzcho³ków szeœcianu
     cubeVertices = {
         {-1, -1, -1}, {1, -1, -1}, {1, 1, -1}, {-1, 1, -1}, // tylna œciana
@@ -14,6 +25,9 @@ Renderer3D::Renderer3D()
         {4,5}, {5,6}, {6,7}, {7,4}, // przednia œciana
         {0,4}, {1,5}, {2,6}, {3,7}  // po³¹czenia miêdzy œcianami
     };
+
+
+    
 }
 
 // Funkcja do rzutowania 3D na 2D
@@ -69,7 +83,9 @@ void Renderer3D::handleViewportInteraction() {
     }
 }
 
-void Renderer3D::drawCube() {
+
+//poprawone drawCube rotX i rotY to rotacje dla poszczególnych view
+void Renderer3D::drawCube(float rotX, float rotY) {
     ImVec2 viewportPos = ImGui::GetCursorScreenPos();
     ImVec2 center(viewportPos.x + viewportSize.x * 0.5f, viewportPos.y + viewportSize.y * 0.5f);
     float scale = std::min(viewportSize.x, viewportSize.y) * 0.2f;
@@ -92,14 +108,14 @@ void Renderer3D::drawCube() {
     // Obracanie i rzutowanie wierzcho³ków
     std::vector<ImVec2> projectedVertices;
     for (const auto& vertex : cubeVertices) {
-        ImVec3 rotated = rotatePoint(vertex, rotationX, rotationY);
+        ImVec3 rotated = rotatePoint(vertex, rotX, rotY);   // zmienione na przekazywane - Maniek
         projectedVertices.push_back(project3DTo2D(rotated, center, scale));
     }
 
     // Rysowanie krawêdzi szeœcianu
     for (const auto& edge : cubeEdges) {
-        draw_list->AddLine(projectedVertices[edge.first],
-            projectedVertices[edge.second],
+        draw_list->AddLine(projectedVertices[edge.x],
+            projectedVertices[edge.y],
             IM_COL32(20, 15, 55, 255), 2.0f);
     }
 
@@ -110,22 +126,53 @@ void Renderer3D::drawCube() {
 }
 
 void Renderer3D::Draw3DView() {
-    ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Widok 3D");
+    ImGui::SetNextWindowSize(ImVec2(1200, 850), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    //ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Widok 3D", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	    //DEBUG: Informacja o widocznoœci okna
+        ImGui::Text("RotationX: %.2f, RotationY: %.2f", rotationX, rotationY);
 
-	//DEBUG: Informacja o widocznoœci okna
-    ImGui::Text("DEBUG: Okno Widok 3D jest widoczne!");
-    ImGui::Text("RotationX: %.2f, RotationY: %.2f", rotationX, rotationY);
+
+        //viewportSize = ImGui::GetContentRegionAvail();
+
+        
+        //Ryzowanie poszczególnych view
+        for (int i = 0; i < 4; i++) {
+            if (i % 2 == 0) {
+                //Margin LEFT
+                ImGui::SetCursorPosX(ImGui::GetCursorStartPos().x + 150);
+            }
+            ImGui::BeginChild(views[i].name.c_str(), viewportSize, true, ImGuiWindowFlags_NoScrollbar );
+            ImGui::Text("** %s **", views[i].name.c_str());
+            ImGui::Text("** %f - %f **", views[i].rotX, views[i].rotY);
+            ImGui::Separator();
 
 
-    viewportSize = ImGui::GetContentRegionAvail();
+            if (i == 3) {
+                views[i].rotX = rotationX;
+                views[i].rotY = rotationY;
 
-    // Rysowanie szeœcianu
-    drawCube();
+                // Obs³uga interakcji tylko dla perspective
+                handleViewportInteraction();
+            }
+            //Wywo³anie odpowiedniego rysowania cube
+            drawCube(views[i].rotX, views[i].rotY);
 
-    // Obs³uga interakcji
-    handleViewportInteraction();
+            ImGui::EndChild();
 
+            if (i % 2 == 0) {
+                ImGui::SameLine();
+            }
+
+
+        }
+
+        // Rysowanie szeœcianu
+        //drawCube();
+
+        // Obs³uga interakcji
+        //handleViewportInteraction();
+        
     ImGui::End();
 }

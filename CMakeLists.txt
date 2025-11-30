@@ -49,7 +49,7 @@ add_executable(MyApp src/main.cpp
     src/Commands/CommandParser.cpp  
     src/Console/Console.cpp
     src/Math/Matrix.cpp
-    src/Math/Vector3.cpp
+    src/Math/ImVec3.cpp
     src/Objects/Box.cpp
     src/Objects/Cone.cpp
     src/Objects/SceneObject.cpp

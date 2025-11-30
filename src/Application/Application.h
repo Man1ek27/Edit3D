@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "PCH.h"
-#include "Console.h"
+#include "Scene.h"
 #include "Render.h"
 
 class Application {
@@ -20,9 +20,6 @@ private:
     const unsigned int FRAME_LIMIT = 60;
 
     sf::RenderWindow main_window;
-    sf::RenderWindow console_window;
 
-    Console console;
-
-    Renderer3D renderer3D; // Dodany renderer 3D
+    Scene scene;
 };

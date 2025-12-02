@@ -22,6 +22,7 @@ private:
     // Punkty szeœcianu 3D
     std::vector<ImVec3> cubeVertices;
     std::vector<ImVec2> cubeEdges; //czemu tu robisz vector::pair a nie vector::ImVec2 ?? - Zmieni³em, lepiej programistycznie to wygl¹da - Maniek
+    // fakt, lepiej tak zrobiæ, jak siê cos wyjebie to nie bêdziemy szukaæ przez pair tylko z ImVec2 - Wojtek
 
     ImVec2 viewportSize;
     ImVec2 singleViewSize;

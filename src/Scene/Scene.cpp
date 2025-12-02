@@ -12,11 +12,11 @@ void Scene::drawScene() {
     ImGui::Begin("Kontrola 3D");
     ImGui::SliderFloat("Obrot X", &renderer3D.rotationX, 0.0f, 360.0f); // czytelny format z wcieciem - Maniek
     ImGui::SliderFloat("Obrot Y", &renderer3D.rotationY, 0.0f, 360.0f);
-    ImGui::SliderFloat("Powiekszenie", &renderer3D.zoom, 0.1f, 3.0f);
+    ImGui::SliderFloat("Powiekszenie", &renderer3D.zoom, 0.125f, 1.0f);
     if (ImGui::Button("Resetuj widok")) {
-        renderer3D.rotationX = 0.0f;
-        renderer3D.rotationY = 0.0f;
-        renderer3D.zoom = 1.0f;
+        renderer3D.rotationX = 148.0f;
+        renderer3D.rotationY = 128.0f;
+        renderer3D.zoom = 0.5f;
     }
     ImGui::End();
 

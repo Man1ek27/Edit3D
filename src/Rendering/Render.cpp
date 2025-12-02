@@ -1,7 +1,7 @@
 #include "Render.h"
 
 Renderer3D::Renderer3D()
-    : rotationX(45.0f), rotationY(45.0f), zoom(1.0f), viewportSize(ImVec2(400, 400)),
+    : rotationX(148.0f), rotationY(128.0f), zoom(0.5f), viewportSize(ImVec2(400, 400)),
 
     // inicjalizacja views
     views{ {
@@ -103,7 +103,7 @@ void Renderer3D::drawCube(float rotX, float rotY) {
     // T³o viewportu
     draw_list->AddRectFilled(viewportPos,
         ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y),
-        IM_COL32(20, 10, 10, 255));
+        IM_COL32(65, 65, 65, 255));
 
     // Obracanie i rzutowanie wierzcho³ków
     std::vector<ImVec2> projectedVertices;
@@ -116,7 +116,7 @@ void Renderer3D::drawCube(float rotX, float rotY) {
     for (const auto& edge : cubeEdges) {
         draw_list->AddLine(projectedVertices[edge.x],
             projectedVertices[edge.y],
-            IM_COL32(20, 15, 55, 255), 2.0f);
+            IM_COL32(0, 43, 255, 255), 2.0f);
     }
 
     // Rysowanie wierzcho³ków

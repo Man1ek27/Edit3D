@@ -20,6 +20,5 @@ void Scene::drawScene() {
     }
     ImGui::End();
 
-
     console.Draw();
 }

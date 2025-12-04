@@ -10,5 +10,7 @@ void Console::Draw() {
 	ImGui::SetNextWindowPos(ImVec2(0, 850));
 	ImGui::Begin(NAME,  nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 		
+	//std::string console_text;
+	//ImGui::InputText(,console_text.,)
 	ImGui::End();
 }

@@ -1,4 +1,5 @@
 #pragma once 
+#define _USE_MATH_DEFINES
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "Math/ImVec3.h"
@@ -10,5 +11,6 @@
 #include <vector>
 #include <utility>
 #include <cmath>
+#include <numbers>
 
 

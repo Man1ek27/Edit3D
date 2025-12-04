@@ -43,8 +43,8 @@ ImVec2 Renderer3D::project3DTo2D(const ImVec3& point, const ImVec2& center, floa
  //Funkcja do obracania punktu 3D
 ImVec3 Renderer3D::rotatePoint(const ImVec3& point, float rotX, float rotY) {
     // Konwersja stopni na radiany
-    float radX = rotX * 3.14159f / 180.0f;
-    float radY = rotY * 3.14159f / 180.0f;
+    float radX = rotX * M_PI / 180.0f; 
+    float radY = rotY * M_PI / 180.0f;
 
     // Obroty
     float cosX = std::cos(radX);

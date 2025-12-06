@@ -13,15 +13,24 @@ public:
     float rotationY;
     float zoom;
 
+    void AddObject(std::unique_ptr<SceneObject> object);
+    void RemoveObject(unsigned int objectId);
+    void ClearObjects();
+    size_t GetObjectCount() const { return objects.size(); }
+
+private:
+    std::vector<std::unique_ptr<SceneObject>> objects;
+
 private:
     void drawCube(float rotX, float rotY); // Rysowanie samego szeœcianu
     ImVec2 project3DTo2D(const ImVec3& point, const ImVec2& center, float scale);
     ImVec3 rotatePoint(const ImVec3& point, float rotX, float rotY);
     void handleViewportInteraction();
 
+    //DEPRECATED
     // Punkty szeœcianu 3D
-    std::vector<ImVec3> cubeVertices;
-    std::vector<ImVec2> cubeEdges; //czemu tu robisz vector::pair a nie vector::ImVec2 ?? - Zmieni³em, lepiej programistycznie to wygl¹da - Maniek
+    //std::vector<ImVec3> cubeVertices;
+    //std::vector<ImVec2> cubeEdges; 
 
     ImVec2 viewportSize;
     ImVec2 singleViewSize;

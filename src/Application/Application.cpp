@@ -1,5 +1,5 @@
 #include "Application.h"
-
+#include "Box.h"
 
 Application::Application() : Application(1920, 1280, "Edit3D") {
 }
@@ -22,8 +22,19 @@ void Application::handleEvents() {
     }
 }
 
-void Application::run() { // nominalnie w Application nie chcemy "suchego kodu" tylko ¿eby by³o tworzenie instancji obiektów i wywo³anie ich metod - Maniek
+void Application::run() {
     sf::Clock deltaClock;
+
+    // Dodaj przyk³adowy Box do sceny przez scene
+    auto box1 = std::make_unique<Box>("Test Box", 2.0f);
+    box1->SetPosition(ImVec3(0, 0, 0));
+    scene.AddObject(std::move(box1));
+
+    // Mo¿esz dodaæ wiêcej obiektów
+    auto box2 = std::make_unique<Box>("Another Box", 1.0f);
+    box2->SetPosition(ImVec3(2, 0, 0));
+    box2->SetEdgeColor(ImColor(0, 255, 0, 255)); // Zielone krawêdzie
+    scene.AddObject(std::move(box2));
 
     while (main_window.isOpen()) {
         handleEvents();
@@ -38,5 +49,3 @@ void Application::run() { // nominalnie w Application nie chcemy "suchego kodu" 
     }
     ImGui::SFML::Shutdown();
 }
-
-

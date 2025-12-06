@@ -58,6 +58,7 @@ add_executable(MyApp src/main.cpp
     src/Rendering/Render.cpp
     src/Scene/Scene.cpp
     src/UI/UI.cpp
+    ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 
 target_include_directories(MyApp PRIVATE
@@ -77,6 +78,7 @@ target_include_directories(MyApp PRIVATE
     src/Console
     ${imgui_SOURCE_DIR}   # do nagłówków ImGui
     ${imgui_sfml_SOURCE_DIR}  # jeśli będziesz używać bezpośrednich nagłówków ImGui-SFML
+    ${imgui_SOURCE_DIR}/misc/cpp
 )
 
 target_link_libraries(MyApp PRIVATE

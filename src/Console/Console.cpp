@@ -57,13 +57,14 @@ void Console::Draw() {
 	ImGui::SetNextWindowPos(ImVec2(0, 850));
 	ImGui::Begin(NAME,  nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 	
-		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -70), false, ImGuiWindowFlags_HorizontalScrollbar);
-			ImGui::Text("Log 1...");
-			ImGui::Text("Log 2...");
-			ImGui::Text("Log 1...");
-			ImGui::Text("Log 2...");
-			ImGui::Text("Log 2...");
-			ImGui::Text("Log 2...");
+		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -40), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+			ImGui::SetCursorPosY(160);
+			for (std::string& log : history) {
+
+				ImGui::Text(log.c_str());
+			}
+
 
 			//if (scrollToBottom) {
 				ImGui::SetScrollHereY(1.0f);
@@ -71,12 +72,24 @@ void Console::Draw() {
 			//}
 		ImGui::EndChild();
 
-		ImGui::SetCursorPosY(90);
+		ImGui::SetCursorPosY(120);
+		ImGui::AlignTextToFramePadding();
+		ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), ">");
+		ImGui::SameLine();
 		ImGui::SetNextItemWidth(-1);
 		if (ImGui::InputText("##Input", &m_Buffer, inputTextFlags, &Console::TextCallbackStub, (void*)this)) {
-			std::cout << m_Buffer << std::endl;	
-			history.push_back(m_Buffer);
-			m_Buffer = "";
+			if (m_Buffer != "") {
+				std::cout << m_Buffer << std::endl;	
+				history.push_back(m_Buffer);
+
+				if (!m_Buffer.empty()) {
+					currentHistory = history.size();
+
+					parser.parse(m_Buffer);
+					parser.execute();
+				}
+				m_Buffer = "";
+			}
 			ImGui::SetKeyboardFocusHere(-1);
 		}
 	ImGui::End();

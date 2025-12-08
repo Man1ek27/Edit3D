@@ -13,6 +13,8 @@ Application::Application(unsigned int width, unsigned int height, sf::String tit
     main_window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close) {
 
     main_window.setFramerateLimit(FRAME_LIMIT);
+    
+    main_window.setPosition(sf::Vector2i(main_window.getPosition().x, 0.f));
     std::ignore = ImGui::SFML::Init(main_window);
 }
 

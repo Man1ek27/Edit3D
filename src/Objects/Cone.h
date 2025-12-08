@@ -1,5 +1,4 @@
 #pragma once
-#include "PCH.h"
 #include "SceneObject.h"
 
 

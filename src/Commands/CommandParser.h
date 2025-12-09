@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cctype>
 #include <unordered_map>
+#include <regex>
 
 
 class CommandParser {
@@ -17,18 +18,24 @@ class CommandParser {
 		CONE,
 		CYLINDER,
 		DELETE,
-		CLEAR_ALL
+		CLEAR_ALL,
+		MOVE,
+		ROTATE,
+		SAVE,
+		LOAD
+
 	};
 
 	private:
-		std::string command = "";
+		commandType command = UNKNOWN;
 		std::vector<float> args;
+		std::string filename;
 
 
-		commandType stringToEnum();
+		commandType stringToEnum(std::string& commandStr);
 
 	public:
-		void parse(std::string& fullCommand);
+		std::string parse(std::string& fullCommand);
 		void execute();
 
 		static bool isNumber(const std::string& s);

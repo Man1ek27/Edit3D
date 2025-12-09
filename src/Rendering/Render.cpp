@@ -13,21 +13,6 @@ Renderer3D::Renderer3D()
           } } {
 
 
-	//DEPRECATED: Stara inicjalizacja szeœcianu 3D - zostawiam na razie, mo¿e siê przydaæ do czegoœ kiedyœ XD - Wojtek
-    //// Inicjalizacja wierzcho³ków szeœcianu
-    //cubeVertices = {
-    //    {-1, -1, -1}, {1, -1, -1}, {1, 1, -1}, {-1, 1, -1}, // tylna œciana
-    //    {-1, -1, 1}, {1, -1, 1}, {1, 1, 1}, {-1, 1, 1}      // przednia œciana
-    //};
-
-    //// Definicja krawêdzi szeœcianu (po³¹czenia miêdzy wierzcho³kami)
-    //cubeEdges = {
-    //    {0,1}, {1,2}, {2,3}, {3,0}, // tylna œciana
-    //    {4,5}, {5,6}, {6,7}, {7,4}, // przednia œciana
-    //    {0,4}, {1,5}, {2,6}, {3,7}  // po³¹czenia miêdzy œcianami
-    //};
-
-
     
 }
 
@@ -91,49 +76,7 @@ void Renderer3D::handleViewportInteraction() {
     }
 }
 
-//DEPRECATED: INFO: COMMENT: Stara funkcja rysuj¹ca szeœcian 3D w pojedynczym viewm
-// Zostawiam, bo mo¿e siê przydaæ do czegoœ kiedyœ XD Korzystamy z sceneobject teraz - Wojtek
-// 
-//poprawone drawCube rotX i rotY to rotacje dla poszczególnych view
-//void Renderer3D::drawCube(float rotX, float rotY) {
-//    ImVec2 viewportPos = ImGui::GetCursorScreenPos();
-//    ImVec2 center(viewportPos.x + viewportSize.x * 0.5f, viewportPos.y + viewportSize.y * 0.5f);
-//    float scale = std::min(viewportSize.x, viewportSize.y) * 0.2f;
-//
-//
-//	//COMMENT, INFO: TO JEST NAJWAZNIEJSZE. Imgui posiada wbudowany system rysowania, uzyskujemy do niego dostêp w draw_list.
-//    ImDrawList* draw_list = ImGui::GetWindowDrawList();
-//	//wystarczy teraz dodaæ do niego elementy rysunkowe, a imgui zajmie siê reszt¹.
-//	//Na tyle na ile rozumiem (a mogê byæ w b³êdzie) to imgui w ka¿dej klatce automatycznie rysuje wszystko od nowa.
-//    //Niestety, narazie z tego co widzê to ka¿dy viewport (czyli okno imgui) posiada swój w³asny draw_list
-//    // (mo¿e jest copy constructor, wiêc wystarczy³oby draw_list skopiowac - nie wiem)
-//	//wiêc nie wiem jak bêdzie z koncepcj¹ "generuj i obracaj raz, a potem tylko renderuj"  - jeszcze siê przyjrzê.
-//	//Prawdopodobnie dostêp do generowanych i obracanych obiektów bardziej globalny, a renderowanie w ka¿dym oknie osobno.
-//
-//    // T³o viewportu
-//    draw_list->AddRectFilled(viewportPos,
-//        ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y),
-//        IM_COL32(65, 65, 65, 255));
-//
-//    // Obracanie i rzutowanie wierzcho³ków
-//    std::vector<ImVec2> projectedVertices;
-//    for (const auto& vertex : cubeVertices) {
-//        ImVec3 rotated = rotatePoint(vertex, rotX, rotY);   // zmienione na przekazywane - Maniek
-//        projectedVertices.push_back(project3DTo2D(rotated, center, scale));
-//    }
-//
-//    // Rysowanie krawêdzi szeœcianu
-//    for (const auto& edge : cubeEdges) {
-//        draw_list->AddLine(projectedVertices[edge.x],
-//            projectedVertices[edge.y],
-//            IM_COL32(0, 43, 255, 255), 2.0f);
-//    }
-//
-//    // Rysowanie wierzcho³ków
-//    for (const auto& vertex : projectedVertices) {
-//        draw_list->AddCircleFilled(vertex, 3.0f, IM_COL32(255, 0, 0, 255));
-//    }
-//}
+
 
 void Renderer3D::Draw3DView() {
     ImGui::SetNextWindowSize(ImVec2(1200, 850), ImGuiCond_FirstUseEver);

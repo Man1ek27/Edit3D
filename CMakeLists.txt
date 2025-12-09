@@ -54,12 +54,14 @@ add_executable(MyApp src/main.cpp
     src/Objects/Cone.cpp
     src/Objects/SceneObject.cpp
     src/Objects/Sphere.cpp
+    src/Objects/Line.cpp 
+    src/Objects/Cylinder.cpp
     src/Rendering/Camera.cpp
     src/Rendering/Render.cpp
     src/Scene/Scene.cpp
     src/UI/UI.cpp
     ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
-)
+    )
 
 target_include_directories(MyApp PRIVATE
     ${CMAKE_BINARY_DIR}/_deps/imgui-src

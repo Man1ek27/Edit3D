@@ -13,35 +13,319 @@ bool CommandParser::isNumber(const std::string& s) {
 
 
 
-void CommandParser::parse(std::string& fullCommand) {
+std::string CommandParser::parse(std::string& fullCommand) {
 	std::stringstream ss(fullCommand);
-	std::string word;
 	std::string argsPart;
-	std::stringstream argsFull;
 
 
+	std::string commandStr;
+	if (!(ss >> commandStr)) {
+		std::cout << "ERROR: No Command. Aviable commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL" << std::endl;
+		return "";
+	}
+	command = stringToEnum(commandStr);
 
-	ss >> command;
-	std::cout << command << std::endl;
+
 
 	std::getline(ss, argsPart);
-	argsPart.erase(std::remove_if(argsPart.begin(), argsPart.end(),
-		[](char c) {
-			return c == ' ' || c == '(' || c == ')';
-		}),
-		argsPart.end());
-	argsFull.str(argsPart);
+	switch (command) {
+		case SET_LINE_COLOR: {
+			// Format: (R,G,B)
+			const std::string regex_wzorzec = R"(\s*\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)\s*)";
 
-	char delimiter = ',';
-	while (std::getline(argsFull, word, delimiter)) {
-		if (isNumber(word)) {
-			args.push_back(std::stof(word));
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: SET_LINE_COLOR (R,G,B)";
+			}
+			else {
+				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stof(dopasowania[2].str()));
+				args.push_back(std::stof(dopasowania[3].str()));
+				return "";
+			}
+
+			break;
+		}
+		case LINE: {
+			// Format: (x1,y1,z1),(x2,y2,z2)
+			const std::string regex_wzorzec = R"(\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: LINE (x1,y1,z1),(x2,y2,z2)";
+			}
+			else {
+				 args.push_back(std::stof(dopasowania[1].str()));
+				 args.push_back(std::stof(dopasowania[2].str()));
+				 args.push_back(std::stof(dopasowania[3].str()));
+				 args.push_back(std::stof(dopasowania[4].str()));
+				 args.push_back(std::stof(dopasowania[5].str()));
+				 args.push_back(std::stof(dopasowania[6].str()));
+				 
+				return "";
+			}
+
+			break;
+		}
+		case BOX: {
+			// Format: (x1,y1,z1),(x2,y2,z2)
+			const std::string regex_wzorzec = R"(\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: BOX (x1,y1,z1),(x2,y2,z2)";
+			}
+			else {
+				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stof(dopasowania[2].str()));
+				args.push_back(std::stof(dopasowania[3].str()));
+				args.push_back(std::stof(dopasowania[4].str()));
+				args.push_back(std::stof(dopasowania[5].str()));
+				args.push_back(std::stof(dopasowania[6].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case SPHERE: {
+			// Format: (x,y,z),r,(n,m)
+			const std::string regex_wzorzec = R"(\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: SPHERE (x,y,z),r,(n,m)";
+			}
+			else {
+				// x, y, z
+				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stof(dopasowania[2].str()));
+				args.push_back(std::stof(dopasowania[3].str()));
+
+				// r
+				args.push_back(std::stof(dopasowania[4].str()));
+
+				// n, m
+				args.push_back(std::stof(dopasowania[5].str()));
+				args.push_back(std::stof(dopasowania[6].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case CONE: {
+			// Format: (x1,y1,z1), r1, (x2,y2,z2), r2, n
+			const std::string regex_wzorzec = R"(\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: CONE (x1,y1,z1), r1, (x2,y2,z2), r2, n";
+			}
+			else {
+				// Punkt 1 (x1, y1, z1)
+				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stof(dopasowania[2].str()));
+				args.push_back(std::stof(dopasowania[3].str()));
+
+				// Promieñ r1
+				args.push_back(std::stof(dopasowania[4].str()));
+
+				// Punkt 2 (x2, y2, z2)
+				args.push_back(std::stof(dopasowania[5].str()));
+				args.push_back(std::stof(dopasowania[6].str()));
+				args.push_back(std::stof(dopasowania[7].str()));
+
+				// Promieñ r2
+				args.push_back(std::stof(dopasowania[8].str()));
+
+				// Liczba segmentów n
+				args.push_back(std::stof(dopasowania[9].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case CYLINDER: {
+			// Format: (x1,y1,z1),(x2,y2,z2), r, n
+			const std::string regex_wzorzec = R"(\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: CYLINDER (x1,y1,z1),(x2,y2,z2), r, n";
+			}
+			else {
+				// Punkt 1 (x1, y1, z1)
+				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stof(dopasowania[2].str()));
+				args.push_back(std::stof(dopasowania[3].str()));
+
+				// Punkt 2 (x2, y2, z2)
+				args.push_back(std::stof(dopasowania[4].str()));
+				args.push_back(std::stof(dopasowania[5].str()));
+				args.push_back(std::stof(dopasowania[6].str()));
+
+				// Promieñ r
+				args.push_back(std::stof(dopasowania[7].str()));
+
+				// Parametr n (liczba segmentów)
+				args.push_back(std::stof(dopasowania[8].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case DELETE: {
+			// Format: id
+			const std::string regex_wzorzec = R"(\s*([0-9]+)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: DELETE id (where id is int >= 0)";
+			}
+			else {
+				args.push_back(std::stof(dopasowania[1].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case CLEAR_ALL: {
+			// Format: brak argumentów
+			const std::string regex_wzorzec = R"(\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: CLEAR_ALL (no arguments)";
+			}
+			else {
+				return "";
+			}
+
+			break;
+		}
+		case MOVE: {
+			// Format: id (x,y,z)
+			const std::string regex_wzorzec = R"(\s*([0-9]+)\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: MOVE id (x,y,z)";
+			}
+			else {
+				// ID
+				args.push_back(std::stof(dopasowania[1].str()));
+
+				// Wektor przesuniêcia: x
+				args.push_back(std::stof(dopasowania[2].str()));
+
+				// Wektor przesuniêcia: y
+				args.push_back(std::stof(dopasowania[3].str()));
+
+				// Wektor przesuniêcia: z
+				args.push_back(std::stof(dopasowania[4].str()));
+
+				return "";
+			}
+			break;
+		}
+		case ROTATE: {
+			// Format: id,(x,y,z),(alpha,beta,gamma)
+			const std::string regex_wzorzec = R"(\s*([0-9]+)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*,\s*\(\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*,\s*([-+]?[0-9]*\.?[0-9]+)\s*\)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: ROTATE id,(x,y,z),(alpha,beta,gamma)";
+			}
+			else {
+				// 1. ID obiektu
+				args.push_back(std::stof(dopasowania[1].str()));
+
+				// 2. Punkt (x, y, z)
+				args.push_back(std::stof(dopasowania[2].str())); 
+				args.push_back(std::stof(dopasowania[3].str())); 
+				args.push_back(std::stof(dopasowania[4].str())); // z
+
+				// 3. K¹ty (alpha, beta, gamma)
+				args.push_back(std::stof(dopasowania[5].str()));
+				args.push_back(std::stof(dopasowania[6].str())); 
+				args.push_back(std::stof(dopasowania[7].str()));
+
+				return "";
+			}
+
+			break;
+		}
+		case SAVE: {
+			// Format: nazwa_pliku (ci¹g znaków)
+			const std::string regex_wzorzec = R"(\s*([a-zA-Z0-9_-]+)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: SAVE filename";
+			}
+			else {
+				filename = dopasowania[1].str();
+				return "";
+			}
+
+			break;
+		}
+		case LOAD: {
+			// Format: nazwa_pliku (ci¹g znaków)
+			const std::string regex_wzorzec = R"(\s*([a-zA-Z0-9_.-]+)\s*)";
+
+			std::regex wzorzec(regex_wzorzec);
+			std::smatch dopasowania;
+
+			if (!std::regex_match(argsPart, dopasowania, wzorzec)) {
+				return "ERROR: Wrong arguments| -- Correct command call: LOAD filename";
+			}
+			else {
+				filename = dopasowania[1].str();
+				return "";
+			}
+
+			break;
+		}
+		case UNKNOWN: {
+				return "ERROR: UNKNOWN command: Aviable commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL";
+			break;
+		}
+		default: {
+			break;
 		}
 	}
+	
 }
 
 
-CommandParser::commandType CommandParser::stringToEnum(){
+CommandParser::commandType CommandParser::stringToEnum(std::string& commandStr){
 	static const std::unordered_map<std::string, commandType> comandMap = {
 		{"SET_LINE_COLOR" , SET_LINE_COLOR},
 		{"LINE" , LINE},
@@ -50,10 +334,14 @@ CommandParser::commandType CommandParser::stringToEnum(){
 		{"CONE", CONE},
 		{"CYLINDER", CYLINDER},
 		{"DELETE", DELETE},
-		{"CLEAR_ALL", CLEAR_ALL}
+		{"CLEAR_ALL", CLEAR_ALL},
+		{"MOVE", MOVE},
+		{"ROTATE", ROTATE},
+		{"SAVE", SAVE},
+		{"LOAD", LOAD}
 	};
 
-	auto it = comandMap.find(command);
+	auto it = comandMap.find(commandStr);
 
 	if (it != comandMap.end()) {
 		return it->second;
@@ -63,25 +351,21 @@ CommandParser::commandType CommandParser::stringToEnum(){
 }
 
 
-// tutaj w ka¿dym case mo¿esz napisaæ tworzenie obiektów - jakoœ tzeba bêdzie to potem odwo³aæ ¿eby te obiektu storowaæ w Scene - mo¿e masz pomys³ 
-//TO DO - rysowanie obiektów 
-//consola nie jest jeszcze skoñczona - ma trochê niedoci¹gniêæ i b³êdów - pewnie nawet ci siê przytafi¹ - no i chce jeszcze oddaæ ob³sugê b³êdów i podpowiadanie sk³adni jak siê 
-//Ÿle wpisze komedê 
+// tutaj w ka¿dym case mo¿esz napisaæ tworzenie obiektów 
 
 void CommandParser::execute() {
 
-	
-	switch (this->stringToEnum()) {
-		case SET_LINE_COLOR:
+	switch (command) {
+		case SET_LINE_COLOR: {
 			if (args.size() >= 3) {
 				ImColor col(args[0], args[1], args[2]);
 				std::cout << "R: " << col.Value.x
 					<< " G: " << col.Value.y
-					<< " B: " << col.Value.z
-					<< " A: " << col.Value.w << std::endl;
-				}
+					<< " B: " << col.Value.z << std::endl;
+			}
 			break;
-		case LINE:
+		}
+		case LINE: {
 			if (args.size() >= 6) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
@@ -90,7 +374,8 @@ void CommandParser::execute() {
 				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
 			}
 			break;
-		case BOX:
+		}
+		case BOX: {
 			if (args.size() >= 6) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
@@ -100,19 +385,21 @@ void CommandParser::execute() {
 			}
 
 			break;
-		case SPHERE:
+		}
+		case SPHERE: {
 			if (args.size() >= 6) {
 				ImVec3 p0(args[0], args[1], args[2]);
 				float r = args[3];
 				ImVec2 nm(args[4], args[5]);
 
 				std::cout << "p0(" << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
-				std::cout << "r: " <<r << std::endl;
-				std::cout << "n: " <<nm.x << " m:" << nm.y << std::endl;
+				std::cout << "r: " << r << std::endl;
+				std::cout << "n: " << nm.x << " m:" << nm.y << std::endl;
 			}
 
 			break;
-		case CONE:
+		}
+		case CONE: {
 			if (args.size() >= 9) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				float r1 = args[3];
@@ -128,7 +415,8 @@ void CommandParser::execute() {
 			}
 
 			break;
-		case CYLINDER:
+		}
+		case CYLINDER: {
 			if (args.size() >= 8) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
@@ -141,20 +429,59 @@ void CommandParser::execute() {
 				std::cout << "n: " << n << std::endl;
 			}
 			break;
-		case DELETE:
+		}
+		case DELETE: {
 			if (args.size() >= 1) {
 				float id = args[0];
 				std::cout << "id: " << id << std::endl;
 			}
 			break;
-		case CLEAR_ALL:
+		}
+		case CLEAR_ALL: {
 			std::cout << "clearing all objects ..." << std::endl;
 			break;
+		}
+		case MOVE: {
+			if (args.size() >= 4) {
+				float id = args[0];
+				ImVec3 p1(args[1], args[2], args[3]);
+
+				std::cout << "id: " << id << std::endl;
+				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
+			}
+			break;
+		}
+		case ROTATE: {
+			if (args.size() >= 7) {
+				float id = args[0];
+				ImVec3 p1(args[1], args[2], args[3]);
+				ImVec3 p2(args[4], args[5], args[6]);
+
+				std::cout << "id: " << id << std::endl;
+				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
+				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
+			}
+			break;
+		}
+		case SAVE: {
+			if (args.size() >= 1) {
+				float name = args[0];
+				std::cout << "name: " << name << std::endl;
+			}
+			break;
+		}
+		case LOAD: {
+			if (args.size() >= 1) {
+				float name = args[0];
+				std::cout << "name: " << name << std::endl;
+			}
+			break;
+		}
 		case UNKNOWN:
-			std::cout << "ERROR";
+			std::cout << "ERROR" <<std::endl;
 			break;
 
-		args.clear();
-		command = "";
 	}
+	args.clear();
+	command = UNKNOWN;
 }

@@ -27,7 +27,6 @@ int Console::serviceTextInputData(ImGuiInputTextCallbackData* data) {
 			else if (currentHistory > 0) {
 				currentHistory--;
 			}
-			std::cout << "up" << std::endl;
 			
 		}
 		else if (data->EventKey == ImGuiKey_DownArrow) {
@@ -43,7 +42,9 @@ int Console::serviceTextInputData(ImGuiInputTextCallbackData* data) {
 			data->DeleteChars(0, data->BufTextLen);
 
 			if (currentHistory != -1) {
-				data->InsertChars(0, history[currentHistory].c_str());
+				if (!history[currentHistory]._Starts_with("ERROR:")) {
+					data->InsertChars(0, history[currentHistory].c_str());
+				}
 			}
 			
 		}		
@@ -85,8 +86,11 @@ void Console::Draw() {
 				if (!m_Buffer.empty()) {
 					currentHistory = history.size();
 
-					parser.parse(m_Buffer);
-					parser.execute();
+					std::string call = parser.parse(m_Buffer);
+					if ( call != "") {
+						history.push_back(call);
+					}
+					else parser.execute();
 				}
 				m_Buffer = "";
 			}

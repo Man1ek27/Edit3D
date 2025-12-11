@@ -16,24 +16,6 @@ Renderer3D::Renderer3D()
     
 }
 
-void Renderer3D::AddObject(std::unique_ptr<SceneObject> object) {
-    objects.push_back(std::move(object));
-}
-
-void Renderer3D::RemoveObject(unsigned int objectId) {
-    objects.erase(
-        std::remove_if(objects.begin(), objects.end(),
-            [objectId](const std::unique_ptr<SceneObject>& obj) {
-                return obj->GetId() == objectId;
-            }),
-        objects.end()
-    );
-}
-
-void Renderer3D::ClearObjects() {
-    objects.clear();
-}
-
 
 // Funkcja do rzutowania 3D na 2D
 ImVec2 Renderer3D::project3DTo2D(const ImVec3& point, const ImVec2& center, float scale) {
@@ -78,60 +60,56 @@ void Renderer3D::handleViewportInteraction() {
 
 
 
-void Renderer3D::Draw3DView() {
+void Renderer3D::Draw3DView(const std::vector<std::unique_ptr<SceneObject>>& objects) {
     ImGui::SetNextWindowSize(ImVec2(1200, 850), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::Begin("Widok 3D", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-	    //DEBUG: Informacja o widocznoœci okna
-        ImGui::Text("RotationX: %.2f, RotationY: %.2f", rotationX, rotationY);
+    ImGui::Begin("Widok 3D", nullptr,
+        ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
+    ImGui::Text("RotationX: %.2f, RotationY: %.2f", rotationX, rotationY);
 
-        //viewportSize = ImGui::GetContentRegionAvail();
-
-        
-        //Ryzowanie poszczególnych view
-        for (int i = 0; i < 4; i++) {
-            if (i % 2 == 0) {
-                ImGui::SetCursorPosX(ImGui::GetCursorStartPos().x + 150);
-            }
-            ImGui::BeginChild(views[i].name.c_str(), viewportSize, true, ImGuiWindowFlags_NoScrollbar );
-            ImGui::Text("** %s **", views[i].name.c_str());
-            ImGui::Text("** %f - %f **", views[i].rotX, views[i].rotY);
-            ImGui::Separator();
-
-
-            if (i == 3) {
-                views[i].rotX = rotationX;
-                views[i].rotY = rotationY;
-
-                // Obs³uga interakcji tylko dla perspective
-                handleViewportInteraction();
-            }
-            //Wywo³anie odpowiedniego rysowania cube
-            ImVec2 viewportPos = ImGui::GetCursorScreenPos();
-            ImVec2 center(viewportPos.x + viewportSize.x * 0.5f, viewportPos.y + viewportSize.y * 0.5f);
-            float scale = std::min(viewportSize.x, viewportSize.y) * 0.2f;
-
-            //MARIUSZ INFO COMMENT TODO: SPRAWDZIÆ CZY OK ZAMYS£
-            for (const auto& obj : objects) {
-                if (i == 3) { // Widok perspektywiczny - ostatni
-                    obj->Draw(ImGui::GetWindowDrawList(), center, scale,
-                        views[i].rotX, views[i].rotY, zoom);
-                }
-                else { // Widoki ortogonalne
-                    obj->Draw(ImGui::GetWindowDrawList(), center, scale,
-                        views[i].rotX, views[i].rotY, 0.0f); // Brak zoom dla ortogonalnych
-                }
-            }
-
-            ImGui::EndChild();
-
-            if (i % 2 == 0) {
-                ImGui::SameLine();
-            }
-
-
+    // Rysowanie poszczególnych view
+    for (int i = 0; i < 4; i++) {
+        if (i % 2 == 0) {
+            ImGui::SetCursorPosX(ImGui::GetCursorStartPos().x + 150);
         }
-        
+
+        ImGui::BeginChild(views[i].name.c_str(), viewportSize, true,
+            ImGuiWindowFlags_NoScrollbar);
+        ImGui::Text("** %s **", views[i].name.c_str());
+        ImGui::Text("** %f - %f **", views[i].rotX, views[i].rotY);
+        ImGui::Separator();
+
+        if (i == 3) {
+            views[i].rotX = rotationX;
+            views[i].rotY = rotationY;
+            handleViewportInteraction();
+        }
+
+        ImVec2 viewportPos = ImGui::GetCursorScreenPos();
+        ImVec2 center(viewportPos.x + viewportSize.x * 0.5f,
+            viewportPos.y + viewportSize.y * 0.5f);
+        float scale = std::min(viewportSize.x, viewportSize.y) * 0.2f;
+
+        // Rysowanie obiektów z przekazanego wektora
+        for (const auto& obj : objects) {
+            if (i == 3) { // Widok perspektywiczny
+                obj->Draw(ImGui::GetWindowDrawList(), center, scale,
+                    views[i].rotX, views[i].rotY, zoom);
+            }
+            else { // Widoki ortogonalne
+                obj->Draw(ImGui::GetWindowDrawList(), center, scale,
+                    views[i].rotX, views[i].rotY, 0.0f);
+            }
+        }
+
+        ImGui::EndChild();
+
+        if (i % 2 == 0) {
+            ImGui::SameLine();
+        }
+    }
+
     ImGui::End();
 }

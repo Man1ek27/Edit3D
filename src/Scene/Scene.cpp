@@ -2,7 +2,7 @@
 
 void Scene::drawScene() {
     // Rysowanie widoku 3D przez dedykowany renderer
-    renderer3D.Draw3DView();
+    renderer3D.Draw3DView(objects);
 
     // Panel kontrolny
     ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
@@ -23,5 +23,19 @@ void Scene::drawScene() {
 }
 
 void Scene::AddObject(std::unique_ptr<SceneObject> object) {
-    renderer3D.AddObject(std::move(object));
+    objects.push_back(std::move(object));
+}
+
+void Scene::RemoveObject(unsigned int objectId) {
+    objects.erase(
+        std::remove_if(objects.begin(), objects.end(),
+            [objectId](const std::unique_ptr<SceneObject>& obj) {
+                return obj->GetId() == objectId;
+            }),
+        objects.end()
+    );
+}
+
+void Scene::ClearObjects() {
+    objects.clear();
 }

@@ -13,6 +13,7 @@ class SceneObject {
 protected:
     static unsigned int currentId;
     unsigned int objectId;
+    std::string commandRecord;
 
 public:
     SceneObject();
@@ -31,6 +32,7 @@ public:
     virtual ImVec3 TransformPoint(const ImVec3& local_point) const;
 
     // Gettery
+    std::string GetCommandRecord()const { return commandRecord; }
     unsigned int GetId() const { return objectId; }
     const std::string& GetName() const { return name; }
     ObjectType GetType() const { return type; }
@@ -41,8 +43,9 @@ public:
     const ImColor& GetVertexColor() const { return vertexColor; }
     bool IsVisible() const { return visible; }
     bool IsSelected() const { return selected; }
-
+     
     // Settery
+    void setCommandRecord(std::string command) { this->commandRecord = command; }
     void SetName(const std::string& name) { this->name = name; }
     void SetPosition(const ImVec3& position) { this->position = position; }
     void SetRotation(const ImVec3& rotation) { this->rotation = rotation; }

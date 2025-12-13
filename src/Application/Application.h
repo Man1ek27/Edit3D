@@ -3,6 +3,11 @@
 #include "PCH.h"
 #include "Scene.h"
 #include "Render.h"
+#include "Box.h"
+#include "Line.h"
+#include "Sphere.h"
+#include "Cone.h"
+#include "Cylinder.h"
 
 class Application {
 

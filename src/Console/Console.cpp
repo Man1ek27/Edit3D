@@ -2,7 +2,7 @@
 #include "Application.h"
 
 
-Console::Console() : NAME{ "Console" } {
+Console::Console(Scene& scen) : NAME{ "Console" }, parser(scen) {
 	inputTextFlags = 
 		ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_CallbackCompletion |
 		ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackAlways | ImGuiInputTextFlags_CharsUppercase;

@@ -13,6 +13,7 @@ class Scene {
         std::vector<std::unique_ptr<SceneObject>> objects; // Przeniesione z Renderera
     
     public:
+        Scene();
         void drawScene();
 
 		//na przyszlosc gdyby mialo się przydać getter do renderera

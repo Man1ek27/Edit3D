@@ -4,14 +4,14 @@
 unsigned int SceneObject::currentId = 0;
 
 SceneObject::SceneObject()
-    : objectId(currentId++), name("Unnamed Object"), type(ObjectType::CUSTOM),
+    : objectId(++currentId), name("Unnamed Object"), type(ObjectType::CUSTOM),
     position({ 0.0f, 0.0f, 0.0f }), rotation({ 0.0f, 0.0f, 0.0f }), scale({ 1.0f, 1.0f, 1.0f }),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
     visible(true), selected(false) {
 }
 
 SceneObject::SceneObject(const std::string& name, ObjectType type)
-    : objectId(currentId++), name(name), type(type),
+    : objectId(++currentId), name(name), type(type),
     position({ 0.0f, 0.0f, 0.0f }), rotation({ 0.0f, 0.0f, 0.0f }), scale({ 1.0f, 1.0f, 1.0f }),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
     visible(true), selected(false) {
@@ -19,7 +19,7 @@ SceneObject::SceneObject(const std::string& name, ObjectType type)
 
 SceneObject::SceneObject(const std::string& name, const ImVec3& position,
     const ImVec3& rotation, const ImVec3& scale, ObjectType type)
-    : objectId(currentId++), name(name), type(type),
+    : objectId(++currentId), name(name), type(type),
     position(position), rotation(rotation), scale(scale),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
     visible(true), selected(false) {

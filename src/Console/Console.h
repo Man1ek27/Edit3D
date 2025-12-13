@@ -1,8 +1,10 @@
 #pragma once 
-
-
 #include "PCH.h"
 #include "CommandParser.h"
+
+
+class Scene;
+
 
 class Console {
 
@@ -18,7 +20,7 @@ class Console {
 		 CommandParser parser;
 
 	public:
-		Console();
+		Console(Scene &scen);
 		void Draw();
 		int serviceTextInputData(ImGuiInputTextCallbackData* data);
 		static int TextCallbackStub(ImGuiInputTextCallbackData* data);

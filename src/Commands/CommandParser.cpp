@@ -1,4 +1,8 @@
 #include "CommandParser.h"
+#include "Scene.h"
+
+CommandParser::CommandParser(Scene& scene): scene(scene){}
+
 
 bool CommandParser::isNumber(const std::string& s) {
 	try {
@@ -40,9 +44,9 @@ std::string CommandParser::parse(std::string& fullCommand) {
 				return "ERROR: Wrong arguments| -- Correct command call: SET_LINE_COLOR (R,G,B)";
 			}
 			else {
-				args.push_back(std::stof(dopasowania[1].str()));
-				args.push_back(std::stof(dopasowania[2].str()));
-				args.push_back(std::stof(dopasowania[3].str()));
+				args.push_back(std::stoi(dopasowania[1].str()));
+				args.push_back(std::stoi(dopasowania[2].str()));
+				args.push_back(std::stoi(dopasowania[3].str()));
 				return "";
 			}
 
@@ -314,7 +318,7 @@ std::string CommandParser::parse(std::string& fullCommand) {
 			break;
 		}
 		case UNKNOWN: {
-				return "ERROR: UNKNOWN command: Aviable commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL";
+				return "ERROR: UNKNOWN command: Aviable commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL, MOVE, ROTATE, SAVE, LOAD";
 			break;
 		}
 		default: {
@@ -358,10 +362,10 @@ void CommandParser::execute() {
 	switch (command) {
 		case SET_LINE_COLOR: {
 			if (args.size() >= 3) {
-				ImColor col(args[0], args[1], args[2]);
-				std::cout << "R: " << col.Value.x
-					<< " G: " << col.Value.y
-					<< " B: " << col.Value.z << std::endl;
+				color = ImColor(args[0], args[1], args[2]);
+				std::cout << "R: " << color.Value.x
+					<< " G: " << color.Value.y
+					<< " B: " << color.Value.z << std::endl;
 			}
 			break;
 		}
@@ -372,13 +376,27 @@ void CommandParser::execute() {
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
 				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
+
+				auto line = std::make_unique<Line>("Line",p1, p2);
+				//line->SetPosition(ImVec3(0, 2, 0)); // Przesuniêcie ca³ej linii
+				line->SetEdgeColor(color);
+				line->setCommandRecord(std::format("LINE ({}, {}, {}) ({}, {}, {})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z));
+				scene.AddObject(std::move(line));
+
+				
 			}
 			break;
 		}
-		case BOX: {
+		case BOX: {//TO DO !!!!!!!!!! - tzreba zmieniæ tutaj definicjê albo stworzyc konstuktor box który przyjmuje dwa wierzcho³ki
 			if (args.size() >= 6) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
+
+				// Dodaj przyk³adowy Box do sceny przez scene
+				auto box = std::make_unique<Box>("Box", 2.0f); 
+				box->SetPosition(p1);
+				box->setCommandRecord(std::format("BOX ({}, {}, {}) ({}, {}, {})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z));
+				scene.AddObject(std::move(box));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
 				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
@@ -392,6 +410,19 @@ void CommandParser::execute() {
 				float r = args[3];
 				ImVec2 nm(args[4], args[5]);
 
+				//Dodawanie sfery do sceny
+				auto sphere = std::make_unique<Sphere>("Sphere", r);
+				sphere->SetPosition(p0);
+				//sphere->SetEdgeColor(ImColor(255, 165, 0, 255)); // Pomarañczowa siatka
+				//sphere->SetVertexColor(ImColor(255, 100, 0, 255)); // Ciemniejszy pomarañcz5));
+				sphere->SetEdgeColor(color); 
+				sphere->SetVertexColor(color); // !!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NIE wiem które to stack a które to slice
+				sphere->SetSlices(nm.x);
+				sphere->SetStacks(nm.y);
+
+				sphere->setCommandRecord(std::format("SPHERE ({}, {}, {}) {} ({} {})", p0.x, p0.y, p0.z, r, nm.x, nm.y));
+				scene.AddObject(std::move(sphere));
+
 				std::cout << "p0(" << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
 				std::cout << "r: " << r << std::endl;
 				std::cout << "n: " << nm.x << " m:" << nm.y << std::endl;
@@ -399,13 +430,22 @@ void CommandParser::execute() {
 
 			break;
 		}
-		case CONE: {
+		case CONE: { // TO DO podbnie jak w box - trzeba z danych które tu s¹ utworzyæ konstruktor 
 			if (args.size() >= 9) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				float r1 = args[3];
 				ImVec3 p2(args[4], args[5], args[6]);
 				float r2 = args[7];
 				float n = args[8];
+
+				// Dodawanie sto¿ka do sceny
+				auto cone = std::make_unique<Cone>("Cone", r1, 2.0f);
+				cone->SetPosition(p1);
+				cone->SetEdgeColor(color); 
+				cone->SetVertexColor(color);
+
+				cone->setCommandRecord(std::format("CONE ({}, {}, {}) r1: {} ({}, {}, {}) r2: {}", p1.x, p1.y, p1.z,r1,  p2.x, p2.y, p2.z, r2));
+				scene.AddObject(std::move(cone));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
 				std::cout << "r1" << r1 << std::endl;
@@ -416,12 +456,21 @@ void CommandParser::execute() {
 
 			break;
 		}
-		case CYLINDER: {
+		case CYLINDER: { // TO DO - i tu tak samo - jakiœ konstrukotr najlepiej pasuj¹cy do tych danych albo odpowiednie settery 
 			if (args.size() >= 8) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
 				float r = args[6];
 				float n = args[7];
+
+				auto cylinder = std::make_unique<Cylinder>("Przekszta³cony walec", r, 1.5f);
+				cylinder->SetPosition(p1);
+				cylinder->SetRotation(ImVec3(45, 30, 0)); // Obrót wokó³ X i Y
+				cylinder->SetScale(ImVec3(1.5f, 0.8f, 1.5f)); // Sp³aszczenie w osi Y
+				cylinder->SetEdgeColor(color); // Pomarañczowy
+				cylinder->setCommandRecord(std::format("CYLINDER ({}, {}, {}) ({}, {}, {}) r: {} n: {}", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, r, n));
+
+				scene.AddObject(std::move(cylinder));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
 				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
@@ -439,6 +488,7 @@ void CommandParser::execute() {
 		}
 		case CLEAR_ALL: {
 			std::cout << "clearing all objects ..." << std::endl;
+			scene.ClearObjects();
 			break;
 		}
 		case MOVE: {
@@ -451,7 +501,7 @@ void CommandParser::execute() {
 			}
 			break;
 		}
-		case ROTATE: {
+		case ROTATE: { // TO DO 
 			if (args.size() >= 7) {
 				float id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
@@ -463,14 +513,14 @@ void CommandParser::execute() {
 			}
 			break;
 		}
-		case SAVE: {
+		case SAVE: { // TO DO 
 			if (args.size() >= 1) {
 				float name = args[0];
 				std::cout << "name: " << name << std::endl;
 			}
 			break;
 		}
-		case LOAD: {
+		case LOAD: { // TO DO 
 			if (args.size() >= 1) {
 				float name = args[0];
 				std::cout << "name: " << name << std::endl;

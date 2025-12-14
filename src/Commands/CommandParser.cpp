@@ -204,7 +204,7 @@ std::string CommandParser::parse(std::string& fullCommand) {
 				return "ERROR: Wrong arguments| -- Correct command call: DELETE id (where id is int >= 0)";
 			}
 			else {
-				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stoi(dopasowania[1].str()));
 
 				return "";
 			}
@@ -239,7 +239,7 @@ std::string CommandParser::parse(std::string& fullCommand) {
 			}
 			else {
 				// ID
-				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stoi(dopasowania[1].str()));
 
 				// Wektor przesuniêcia: x
 				args.push_back(std::stof(dopasowania[2].str()));
@@ -266,7 +266,7 @@ std::string CommandParser::parse(std::string& fullCommand) {
 			}
 			else {
 				// 1. ID obiektu
-				args.push_back(std::stof(dopasowania[1].str()));
+				args.push_back(std::stoi(dopasowania[1].str()));
 
 				// 2. Punkt (x, y, z)
 				args.push_back(std::stof(dopasowania[2].str())); 
@@ -481,8 +481,10 @@ void CommandParser::execute() {
 		}
 		case DELETE: {
 			if (args.size() >= 1) {
-				float id = args[0];
+				int id = args[0];
 				std::cout << "id: " << id << std::endl;
+
+				scene.RemoveObject(id);
 			}
 			break;
 		}
@@ -491,13 +493,17 @@ void CommandParser::execute() {
 			scene.ClearObjects();
 			break;
 		}
-		case MOVE: {
+		case MOVE: { // TO DO - wywo³anie setCommandRecord dla ka¿dej figury - Maniek zrobi (bo po zmienie pozycji zostaje tak samo jak by³o na razie)
 			if (args.size() >= 4) {
-				float id = args[0];
+				int id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
 
 				std::cout << "id: " << id << std::endl;
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
+
+				scene.MoveObject(id, p1);
+
+
 			}
 			break;
 		}
@@ -505,11 +511,13 @@ void CommandParser::execute() {
 			if (args.size() >= 7) {
 				float id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
-				ImVec3 p2(args[4], args[5], args[6]);
+				ImVec3 rot(args[4], args[5], args[6]);
 
 				std::cout << "id: " << id << std::endl;
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
+				std::cout << "p2(" << rot.x << ", " << rot.y << ", " << rot.z << std::endl;
+
+				scene.RotateObject(id, p1, rot);
 			}
 			break;
 		}

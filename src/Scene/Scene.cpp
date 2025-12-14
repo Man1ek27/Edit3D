@@ -29,7 +29,7 @@ void Scene::drawScene() {
     ImGui::SetNextWindowSize(ImVec2(420, 850), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos(ImVec2(1200, 0), ImGuiCond_FirstUseEver);
     ImGui::Begin("Recorder", nullptr,
-        ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar | 
+        ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
         ImGui::Text("RECORDER:");
 
@@ -57,4 +57,38 @@ void Scene::RemoveObject(unsigned int objectId) {
 
 void Scene::ClearObjects() {
     objects.clear();
+}
+
+std::optional<unsigned> Scene::indexFromId(int id) const {
+    unsigned index = 0;
+    for (const auto& obj : objects) {
+        if (obj->GetId() == id)
+            return index;
+        index++;
+    }
+    return std::nullopt; 
+}
+
+
+
+void Scene::MoveObject(unsigned int objectId, ImVec3& newPos) {
+    auto result = this->indexFromId(objectId);
+    ImVec3 oldPos = objects[result.value()]->GetPosition();
+    if (result.has_value()) {
+        objects[result.value()]->SetPosition(ImVec3(oldPos.x+newPos.x, oldPos.y + newPos.y, oldPos.z + newPos.z));
+    }
+    else {
+        std::cout << "Error no object with this id" << std::endl;
+    }
+}
+
+void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) { // - TO DO - tu przeba to jakoœ ³adnie zrobiæ bo mamy rotowaæ wzglêdem punktu poin o k¹ty newRot(alfa, beta, delta)
+    auto result = this->indexFromId(objectId);
+    ImVec3 oldRot = objects[result.value()]->GetRotation();
+    if (result.has_value()) {
+        objects[result.value()]->SetPosition(ImVec3(oldRot.x + newRot.x, oldRot.y + newRot.y, oldRot.z + newRot.z));
+    }
+    else {
+        std::cout << "Error no object with this id" << std::endl;
+    }
 }

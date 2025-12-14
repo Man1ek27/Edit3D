@@ -5,6 +5,7 @@
 #include "SceneObject.h"
 #include <memory>
 #include <vector>
+#include <optional>
 
 class Scene {
     private:
@@ -22,7 +23,11 @@ class Scene {
 
         void AddObject(std::unique_ptr<SceneObject> object);
         void RemoveObject(unsigned int objectId);
+        void MoveObject(unsigned int objectId, ImVec3& newPos);
+        void RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot);
         void ClearObjects();
+
+        std::optional<unsigned> indexFromId(int id) const;
     
 		// Getter obiektów dla Renderera i Registratora
         const std::vector<std::unique_ptr<SceneObject>>& GetObjects() const { return objects; }

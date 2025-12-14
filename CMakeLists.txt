@@ -1,8 +1,12 @@
 ﻿cmake_minimum_required(VERSION 3.28)
-project(MyApp LANGUAGES CXX)
+project(Edit3D LANGUAGES CXX)
+
+
+
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_definitions(ImDrawIdx=unsigned)
 
 include(FetchContent)
 
@@ -45,7 +49,7 @@ FetchContent_MakeAvailable(IMGUI_SFML)
 # --------------------------------------------------------------
 add_executable(MyApp src/main.cpp
     src/Application/Application.cpp  
-    src/Commands/CommandHistory.cpp  
+      
     src/Commands/CommandParser.cpp  
     src/Console/Console.cpp
     src/Math/Matrix.cpp

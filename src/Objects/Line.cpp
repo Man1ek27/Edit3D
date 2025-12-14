@@ -71,8 +71,8 @@ void Line::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
     if (!IsVisible()) return;
 
     // Kolor linii (jeœli jest zaznaczona, inny kolor)
-    ImColor line_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetEdgeColor();
-    ImColor vertex_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetVertexColor();
+    ImColor line_color =  GetEdgeColor();
+    ImColor vertex_color = GetVertexColor();
 
     // Transformujemy punkty linii do przestrzeni œwiata
     ImVec3 worldStart = TransformPoint(localStart);
@@ -89,13 +89,13 @@ void Line::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
     // Rysowanie linii (krawêdzi)
     if (show_edges) {
         // Gruboœæ linii mo¿e zale¿eæ od tego, czy obiekt jest zaznaczony
-        float thickness = IsSelected() ? 3.0f : 2.0f;
+        float thickness =  2.0f;
         draw_list->AddLine(screenStart, screenEnd, line_color, thickness);
     }
 
     // Rysowanie wierzcho³ków (punktów koñcowych linii)
     if (show_vertices) {
-        float radius = IsSelected() ? 5.0f : 3.5f;
+        float radius =  3.5f;
         draw_list->AddCircleFilled(screenStart, radius, vertex_color);
         draw_list->AddCircleFilled(screenEnd, radius, vertex_color);
     }

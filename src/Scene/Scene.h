@@ -6,12 +6,18 @@
 #include <memory>
 #include <vector>
 #include <optional>
+#include <fstream>
+#include <nlohmann/json.hpp> 
+
+using json = nlohmann::json;
 
 class Scene {
     private:
         Console console;
         Renderer3D renderer3D;
         std::vector<std::unique_ptr<SceneObject>> objects; // Przeniesione z Renderera
+		json SceneObjectToJson(const SceneObject& obj); //funckaj pomocnicza, która konwertuje obiekt sceny do formatu JSON
+		std::unique_ptr<SceneObject> JsonToSceneObject(const json& j); //funkcja pomocnicza, która tworzy obiekt sceny z formatu JSON
     
     public:
         Scene();
@@ -32,4 +38,8 @@ class Scene {
 		// Getter obiektów dla Renderera i Registratora
         const std::vector<std::unique_ptr<SceneObject>>& GetObjects() const { return objects; }
         std::vector<std::unique_ptr<SceneObject>>& GetObjects() { return objects; }
+
+        //Zapisywanie i wczytywanie sceny z JSON
+        void SaveToFile(const std::string& filename = "scene.json");
+        void LoadFromFile(const std::string& filename = "scene.json");
 };

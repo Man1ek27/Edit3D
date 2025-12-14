@@ -103,8 +103,8 @@ void Cone::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
     if (!IsVisible()) return;
 
     // Kolor sto¿ka (jeœli jest zaznaczony, inny kolor)
-    ImColor edge_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetEdgeColor();
-    ImColor vertex_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetVertexColor();
+    ImColor edge_color =  GetEdgeColor();
+    ImColor vertex_color = GetVertexColor();
 
     // Transformujemy punkty sto¿ka do przestrzeni œwiata
     ImVec3 worldApex = TransformPoint(apex);
@@ -142,23 +142,14 @@ void Cone::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
     // Rysowanie wierzcho³ków
     if (show_vertices) {
         // Wierzcho³ek sto¿ka
-        float apex_radius = IsSelected() ? 5.0f : 3.5f;
+        float apex_radius = 3.5f;
         draw_list->AddCircleFilled(screenApex, apex_radius, vertex_color);
 
         // Wierzcho³ki podstawy
-        float base_radius = IsSelected() ? 4.0f : 3.0f;
+        float base_radius = 3.0f;
         for (const auto& screenBaseVertex : screenBaseVertices) {
             draw_list->AddCircleFilled(screenBaseVertex, base_radius, vertex_color);
         }
     }
 
-    // Dodatkowo narysuj oœ sto¿ka (linia od œrodka podstawy do wierzcho³ka) jeœli zaznaczony
-    if (IsSelected()) {
-        ImVec3 worldBaseCenter = TransformPoint(ImVec3(0, -height / 2.0f, 0));
-        ImVec3 cameraBaseCenter = RotateCameraPoint(worldBaseCenter, cam_rotX, cam_rotY);
-        ImVec2 screenBaseCenter = ProjectPoint(cameraBaseCenter, view_center, view_scale, cam_zoom);
-
-        draw_list->AddLine(screenBaseCenter, screenApex, ImColor(255, 255, 0, 200), 1.5f);
-        draw_list->AddCircleFilled(screenBaseCenter, 3.0f, ImColor(255, 255, 0, 255));
-    }
 }

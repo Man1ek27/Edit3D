@@ -32,6 +32,16 @@ void Application::handleEvents() {
 void Application::run() {
     sf::Clock deltaClock;
 
+    auto box = std::make_unique<Box>("Test Box", 2.0f);
+    box->SetPosition(ImVec3(0, 0, 0));
+    box->SetEdgeColor(ImColor(255, 0, 0, 255));
+    scene.AddObject(std::move(box));
+
+	auto sphere = std::make_unique<Sphere>("Test Sphere", 1.0f);
+	sphere->SetPosition(ImVec3(3, 0, 0));
+	sphere->SetEdgeColor(ImColor(0, 0, 255, 255));
+	scene.AddObject(std::move(sphere));
+
     while (main_window.isOpen()) {
         handleEvents();
         ImGui::SFML::Update(main_window, deltaClock.restart());

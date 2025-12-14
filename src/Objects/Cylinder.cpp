@@ -94,8 +94,8 @@ void Cylinder::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view
     if (!IsVisible()) return;
 
     // Kolor walca (jeœli jest zaznaczony, inny kolor)
-    ImColor edge_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetEdgeColor();
-    ImColor vertex_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetVertexColor();
+    ImColor edge_color = GetEdgeColor();
+    ImColor vertex_color = GetVertexColor();
 
     // Transformujemy i rzutujemy wierzcho³ki górnej podstawy
     std::vector<ImVec2> screenTopVertices;
@@ -146,7 +146,7 @@ void Cylinder::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view
 
     // Rysowanie wierzcho³ków
     if (show_vertices) {
-        float vertex_radius = IsSelected() ? 4.0f : 3.0f;
+        float vertex_radius = 3.0f;
 
         // Wierzcho³ki górnej podstawy
         if (drawTopBase) {
@@ -163,19 +163,5 @@ void Cylinder::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view
         }
     }
 
-    // Dodatkowo narysuj oœ walca (linia od œrodka dolnej podstawy do œrodka górnej) jeœli zaznaczony
-    if (IsSelected()) {
-        ImVec3 worldTopCenter = TransformPoint(ImVec3(0, height / 2.0f, 0));
-        ImVec3 worldBottomCenter = TransformPoint(ImVec3(0, -height / 2.0f, 0));
 
-        ImVec3 cameraTopCenter = RotateCameraPoint(worldTopCenter, cam_rotX, cam_rotY);
-        ImVec3 cameraBottomCenter = RotateCameraPoint(worldBottomCenter, cam_rotX, cam_rotY);
-
-        ImVec2 screenTopCenter = ProjectPoint(cameraTopCenter, view_center, view_scale, cam_zoom);
-        ImVec2 screenBottomCenter = ProjectPoint(cameraBottomCenter, view_center, view_scale, cam_zoom);
-
-        draw_list->AddLine(screenTopCenter, screenBottomCenter, ImColor(255, 255, 0, 200), 1.5f);
-        draw_list->AddCircleFilled(screenTopCenter, 3.0f, ImColor(255, 255, 0, 255));
-        draw_list->AddCircleFilled(screenBottomCenter, 3.0f, ImColor(255, 255, 0, 255));
-    }
 }

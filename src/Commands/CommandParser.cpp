@@ -24,7 +24,7 @@ std::string CommandParser::parse(std::string& fullCommand) {
 
 	std::string commandStr;
 	if (!(ss >> commandStr)) {
-		std::cout << "ERROR: No Command. Aviable commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL" << std::endl;
+		std::cout << "ERROR: No Command detected. Available commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL, SAVE, LOAD" << std::endl;
 		return "";
 	}
 	command = stringToEnum(commandStr);
@@ -524,15 +524,17 @@ void CommandParser::execute() {
 		case SAVE: { // TO DO 
 			if (args.size() >= 1) {
 				float name = args[0];
-				std::cout << "name: " << name << std::endl;
+				std::cout << "name: " << name << std::endl; //nie mam pojêcia co robi ten kod i dlaczego mamy tu float - Wojtek
 			}
+			scene.SaveToFile("test.json");
 			break;
 		}
 		case LOAD: { // TO DO 
 			if (args.size() >= 1) {
 				float name = args[0];
-				std::cout << "name: " << name << std::endl;
+				std::cout << "name: " << name << std::endl; //tak samo tutaj, zrób tak aby mo¿na by³o wpisaæ nazwê pliku - Wojtek
 			}
+			scene.LoadFromFile("test.json");
 			break;
 		}
 		case UNKNOWN:

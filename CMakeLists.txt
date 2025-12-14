@@ -44,6 +44,13 @@ set(IMGUI_SFML_FIND_SFML OFF) # wymuś brak find_package
 
 FetchContent_MakeAvailable(IMGUI_SFML)
 
+#stuff dla zapisywania w JSON obiektów
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.2
+)
+FetchContent_MakeAvailable(nlohmann_json)
 # --------------------------------------------------------------
 # Twój program
 # --------------------------------------------------------------
@@ -92,4 +99,5 @@ target_link_libraries(MyApp PRIVATE
     sfml-window
     sfml-system
     ImGui-SFML::ImGui-SFML
+    nlohmann_json::nlohmann_json
 )

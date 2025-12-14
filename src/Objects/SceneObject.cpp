@@ -7,14 +7,14 @@ SceneObject::SceneObject()
     : objectId(++currentId), name("Unnamed Object"), type(ObjectType::CUSTOM),
     position({ 0.0f, 0.0f, 0.0f }), rotation({ 0.0f, 0.0f, 0.0f }), scale({ 1.0f, 1.0f, 1.0f }),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
-    visible(true), selected(false) {
+    visible(true) {
 }
 
 SceneObject::SceneObject(const std::string& name, ObjectType type)
     : objectId(++currentId), name(name), type(type),
     position({ 0.0f, 0.0f, 0.0f }), rotation({ 0.0f, 0.0f, 0.0f }), scale({ 1.0f, 1.0f, 1.0f }),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
-    visible(true), selected(false) {
+    visible(true) {
 }
 
 SceneObject::SceneObject(const std::string& name, const ImVec3& position,
@@ -22,7 +22,7 @@ SceneObject::SceneObject(const std::string& name, const ImVec3& position,
     : objectId(++currentId), name(name), type(type),
     position(position), rotation(rotation), scale(scale),
     edgeColor(IM_COL32(255, 255, 255, 255)), vertexColor(IM_COL32(255, 0, 0, 255)),
-    visible(true), selected(false) {
+    visible(true) {
 }
 
 ImVec3 SceneObject::TransformPoint(const ImVec3& local_point) const {

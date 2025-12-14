@@ -42,7 +42,6 @@ public:
     const ImColor& GetEdgeColor() const { return edgeColor; }
     const ImColor& GetVertexColor() const { return vertexColor; }
     bool IsVisible() const { return visible; }
-    bool IsSelected() const { return selected; }
      
     // Settery
     void setCommandRecord(std::string command) { this->commandRecord = command; }
@@ -52,8 +51,8 @@ public:
     void SetScale(const ImVec3& scale) { this->scale = scale; }
     void SetEdgeColor(const ImColor& color) { edgeColor = color; }
     void SetVertexColor(const ImColor& color) { vertexColor = color; }
+    //mo¿e siê przydaæ przy clippingu
     void SetVisible(bool visible) { this->visible = visible; }
-    void SetSelected(bool selected) { this->selected = selected; }
 
     // Transformacje
     void Translate(const ImVec3& translation) {
@@ -84,5 +83,4 @@ protected:
     ImColor edgeColor;
     ImColor vertexColor;
     bool visible;
-    bool selected;
 };

@@ -91,9 +91,8 @@ void Box::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_scal
 
     if (!IsVisible()) return;
 
-    // Kolor obiektu (jeœli jest zaznaczony, inny kolor)
-    ImColor edge_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetEdgeColor();
-    ImColor vertex_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetVertexColor();
+    ImColor edge_color =  GetEdgeColor();
+    ImColor vertex_color =  GetVertexColor();
 
     // Transformujemy wszystkie wierzcho³ki do przestrzeni œwiata i rzutujemy na 2D
     std::vector<ImVec2> projectedVertices;

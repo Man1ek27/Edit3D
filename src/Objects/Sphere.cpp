@@ -118,8 +118,8 @@ void Sphere::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_s
     if (!IsVisible()) return;
 
     // Kolor sfery (jeœli jest zaznaczona, inny kolor)
-    ImColor edge_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetEdgeColor();
-    ImColor vertex_color = IsSelected() ? ImColor(255, 255, 0, 255) : GetVertexColor();
+    ImColor edge_color =  GetEdgeColor();
+    ImColor vertex_color =  GetVertexColor();
 
     // Transformujemy wszystkie wierzcho³ki sfery do przestrzeni œwiata i rzutujemy na 2D
     std::vector<ImVec2> projectedVertices;
@@ -158,7 +158,7 @@ void Sphere::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_s
     // Rysowanie wierzcho³ków
     if (show_vertices) {
         // Rysujemy tylko niektóre wierzcho³ki, ¿eby nie zaœmiecaæ widoku
-        float vertex_size = IsSelected() ? 3.0f : 2.0f;
+        float vertex_size =  2.0f;
 
         // Rysuj co 4 wierzcho³ek
         for (size_t i = 0; i < projectedVertices.size(); i += 4) {
@@ -167,12 +167,5 @@ void Sphere::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_s
     }
 
     // Dodatkowo narysuj œrodek sfery
-    if (IsSelected()) {
-        ImVec3 worldCenter = TransformPoint(ImVec3(0, 0, 0));
-        ImVec3 cameraCenter = RotateCameraPoint(worldCenter, cam_rotX, cam_rotY);
-        ImVec2 screenCenter = ProjectPoint(cameraCenter, view_center, view_scale, cam_zoom);
-
-        draw_list->AddCircle(screenCenter, 8.0f, ImColor(255, 255, 0, 255), 0, 2.0f);
-        draw_list->AddCircleFilled(screenCenter, 4.0f, ImColor(255, 255, 0, 255));
-    }
+    
 }

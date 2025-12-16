@@ -380,7 +380,7 @@ void CommandParser::execute() {
 				auto line = std::make_unique<Line>("Line",p1, p2);
 				//line->SetPosition(ImVec3(0, 2, 0)); // Przesuniêcie ca³ej linii
 				line->SetEdgeColor(color);
-				line->setCommandRecord(std::format("LINE ({}, {}, {}) ({}, {}, {})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z));
+				line->reloadCommandRecord();
 				scene.AddObject(std::move(line));
 
 				
@@ -395,7 +395,7 @@ void CommandParser::execute() {
 				// Dodaj przyk³adowy Box do sceny przez scene
 				auto box = std::make_unique<Box>("Box", 2.0f); 
 				box->SetPosition(p1);
-				box->setCommandRecord(std::format("BOX ({}, {}, {}) ({}, {}, {})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z));
+				box->reloadCommandRecord();
 				scene.AddObject(std::move(box));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
@@ -413,14 +413,12 @@ void CommandParser::execute() {
 				//Dodawanie sfery do sceny
 				auto sphere = std::make_unique<Sphere>("Sphere", r);
 				sphere->SetPosition(p0);
-				//sphere->SetEdgeColor(ImColor(255, 165, 0, 255)); // Pomarañczowa siatka
-				//sphere->SetVertexColor(ImColor(255, 100, 0, 255)); // Ciemniejszy pomarañcz5));
 				sphere->SetEdgeColor(color); 
 				sphere->SetVertexColor(color); // !!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NIE wiem które to stack a które to slice
 				sphere->SetSlices(nm.x);
 				sphere->SetStacks(nm.y);
 
-				sphere->setCommandRecord(std::format("SPHERE ({}, {}, {}) {} ({} {})", p0.x, p0.y, p0.z, r, nm.x, nm.y));
+				sphere->reloadCommandRecord();
 				scene.AddObject(std::move(sphere));
 
 				std::cout << "p0(" << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
@@ -444,7 +442,7 @@ void CommandParser::execute() {
 				cone->SetEdgeColor(color); 
 				cone->SetVertexColor(color);
 
-				cone->setCommandRecord(std::format("CONE ({}, {}, {}) r1: {} ({}, {}, {}) r2: {}", p1.x, p1.y, p1.z,r1,  p2.x, p2.y, p2.z, r2));
+				cone->reloadCommandRecord();
 				scene.AddObject(std::move(cone));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
@@ -467,9 +465,8 @@ void CommandParser::execute() {
 				cylinder->SetPosition(p1);
 				cylinder->SetRotation(ImVec3(45, 30, 0)); // Obrót wokó³ X i Y
 				cylinder->SetScale(ImVec3(1.5f, 0.8f, 1.5f)); // Sp³aszczenie w osi Y
-				cylinder->SetEdgeColor(color); // Pomarañczowy
-				cylinder->setCommandRecord(std::format("CYLINDER ({}, {}, {}) ({}, {}, {}) r: {} n: {}", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, r, n));
-
+				cylinder->SetEdgeColor(color); 
+				cylinder->reloadCommandRecord();
 				scene.AddObject(std::move(cylinder));
 
 				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
@@ -493,7 +490,7 @@ void CommandParser::execute() {
 			scene.ClearObjects();
 			break;
 		}
-		case MOVE: { // TO DO - wywo³anie setCommandRecord dla ka¿dej figury - Maniek zrobi (bo po zmienie pozycji zostaje tak samo jak by³o na razie)
+		case MOVE: {
 			if (args.size() >= 4) {
 				int id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
@@ -523,18 +520,28 @@ void CommandParser::execute() {
 		}
 		case SAVE: { // TO DO 
 			if (args.size() >= 1) {
-				float name = args[0];
-				std::cout << "name: " << name << std::endl; //nie mam pojêcia co robi ten kod i dlaczego mamy tu float - Wojtek
+				filename = args[0];
+				std::cout << "name: " << filename << std::endl; 
 			}
-			scene.SaveToFile("test.json");
+			std::string fullPath = filename + ".json";
+			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
+			std::transform(fullPath.begin(), fullPath.end(), fullPath.begin(),
+				[](unsigned char c) { return std::tolower(c); });
+
+			scene.SaveToFile(fullPath);
 			break;
 		}
 		case LOAD: { // TO DO 
 			if (args.size() >= 1) {
-				float name = args[0];
-				std::cout << "name: " << name << std::endl; //tak samo tutaj, zrób tak aby mo¿na by³o wpisaæ nazwê pliku - Wojtek
+				filename = args[0];
+				std::cout << "name: " << filename << std::endl;
 			}
-			scene.LoadFromFile("test.json");
+			std::string fullPath = filename + ".json";
+			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
+			std::transform(fullPath.begin(), fullPath.end(), fullPath.begin(),
+				[](unsigned char c) { return std::tolower(c); });
+
+			scene.LoadFromFile(fullPath);
 			break;
 		}
 		case UNKNOWN:

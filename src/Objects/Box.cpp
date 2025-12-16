@@ -132,3 +132,10 @@ void Box::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_scal
         }
     }
 }
+
+
+void Box::reloadCommandRecord() {
+    //box->setCommandRecord(std::format("BOX ({}, {}, {}) ({}, {}, {})", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z));
+
+    this->commandRecord = std::format("BOX ({}, {}, {}) a: {}", position.x, position.y, position.z, size);
+}

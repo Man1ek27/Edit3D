@@ -100,3 +100,8 @@ void Line::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
         draw_list->AddCircleFilled(screenEnd, radius, vertex_color);
     }
 }
+
+
+void Line::reloadCommandRecord(){
+    this->commandRecord = std::format("LINE ({}, {}, {}) {}", position.x, position.y, position.z, this->GetLength());
+}

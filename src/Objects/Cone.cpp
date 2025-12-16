@@ -153,3 +153,9 @@ void Cone::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_sca
     }
 
 }
+
+void Cone::reloadCommandRecord() {
+    //cone->setCommandRecord(std::format("CONE ({}, {}, {}) r1: {} ({}, {}, {}) r2: {}", p1.x, p1.y, p1.z,r1,  p2.x, p2.y, p2.z, r2));
+
+    this->commandRecord = std::format("CONE ({}, {}, {}) r: {} h: {}", position.x, position.y, position.z, radius, height);
+}

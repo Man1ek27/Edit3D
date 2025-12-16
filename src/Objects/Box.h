@@ -14,10 +14,12 @@ public:
     virtual void Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_scale,
         float cam_rotX, float cam_rotY, float cam_zoom,
         bool show_vertices = true, bool show_edges = true) const override;
+    void reloadCommandRecord() override;
 
     // Metody specyficzne dla Box
     float GetSize() const { return size; }
     void SetSize(float newSize) { size = newSize; GenerateVertices(); }
+
 
 private:
     void GenerateVertices(); // Generuje wierzcho³ki szeœcianu

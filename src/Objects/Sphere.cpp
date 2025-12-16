@@ -169,3 +169,9 @@ void Sphere::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view_s
     // Dodatkowo narysuj œrodek sfery
     
 }
+
+void Sphere::reloadCommandRecord() {
+    //sphere->setCommandRecord(std::format("SPHERE ({}, {}, {}) {} ({} {})", p0.x, p0.y, p0.z, r, nm.x, nm.y));
+
+    this->commandRecord = std::format("SPHERE ({}, {}, {}) R: {} ", position.x, position.y, position.z, radius);
+}

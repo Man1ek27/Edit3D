@@ -42,14 +42,20 @@ class CommandParser {
 		Scene& scene;
 
 
-
+		//pomocnicza komenda do mapowania na Enum
 		commandType stringToEnum(std::string& commandStr);
 
 	public:
+
 		CommandParser(Scene& scene);
+
+		//metoda parsuj¹ca dane przychodz¹ce na konsoli
 		std::string parse(std::string& fullCommand);
+
+		//metoda wykonuj¹ca polecenie
 		void execute();
 
+		//statyczna metoda pomocnicza do sprawdzenia czy string jest liczb¹ 
 		static bool isNumber(const std::string& s);
 		
 };

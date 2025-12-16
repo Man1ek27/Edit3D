@@ -23,6 +23,7 @@ public:
 
     // D³ugoœæ linii
     float GetLength() const;
+    void reloadCommandRecord() override;
 
 private:
     ImVec3 localStart; // Pocz¹tkowy punkt w lokalnym uk³adzie wspó³rzêdnych

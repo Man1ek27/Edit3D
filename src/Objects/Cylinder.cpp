@@ -165,3 +165,8 @@ void Cylinder::Draw(ImDrawList* draw_list, const ImVec2& view_center, float view
 
 
 }
+
+
+void Cylinder::reloadCommandRecord() {
+    this->commandRecord = std::format("CYLINDER ({}, {}, {})  r: {} h: {}", position.x, position.y, position.z, radius, height);
+}

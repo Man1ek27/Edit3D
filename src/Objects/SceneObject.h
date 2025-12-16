@@ -73,6 +73,8 @@ public:
         scale.z *= scale_factor.z;
     }
 
+    //Metoda do odœwierzania Wyœwietlanej komendy w rejestratorze
+    virtual void reloadCommandRecord() = 0;
 protected:
     // Dane obiektu
     std::string name;

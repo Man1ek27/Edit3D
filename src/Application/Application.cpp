@@ -35,11 +35,13 @@ void Application::run() {
     auto box = std::make_unique<Box>("Test Box", 2.0f);
     box->SetPosition(ImVec3(0, 0, 0));
     box->SetEdgeColor(ImColor(255, 0, 0, 255));
+    box->reloadCommandRecord();
     scene.AddObject(std::move(box));
 
 	auto sphere = std::make_unique<Sphere>("Test Sphere", 1.0f);
 	sphere->SetPosition(ImVec3(3, 0, 0));
 	sphere->SetEdgeColor(ImColor(0, 0, 255, 255));
+    sphere->reloadCommandRecord();
 	scene.AddObject(std::move(sphere));
 
     while (main_window.isOpen()) {

@@ -60,6 +60,7 @@ void Scene::MoveObject(unsigned int objectId, ImVec3& newPos) {
     ImVec3 oldPos = objects[result.value()]->GetPosition();
     if (result.has_value()) {
         objects[result.value()]->SetPosition(ImVec3(oldPos.x+newPos.x, oldPos.y + newPos.y, oldPos.z + newPos.z));
+        objects[result.value()]->reloadCommandRecord();
     }
     else {
         std::cout << "Error no object with this id" << std::endl;
@@ -71,6 +72,7 @@ void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) {
     ImVec3 oldRot = objects[result.value()]->GetRotation();
     if (result.has_value()) {
         objects[result.value()]->SetPosition(ImVec3(oldRot.x + newRot.x, oldRot.y + newRot.y, oldRot.z + newRot.z));
+        objects[result.value()]->reloadCommandRecord();
     }
     else {
         std::cout << "Error no object with this id" << std::endl;
@@ -91,6 +93,7 @@ void Scene::SaveToFile(const std::string& filename) {
 
     for (const auto& obj : objects) {
         try {
+            
             json objJson = SceneObjectToJson(*obj);
             objectsArray.push_back(objJson);
         }
@@ -134,6 +137,7 @@ void Scene::LoadFromFile(const std::string& filename) {
                 try {
                     auto obj = JsonToSceneObject(objJson);
                     if (obj) {
+                        obj->reloadCommandRecord();
                         AddObject(std::move(obj));
                     }
                 }

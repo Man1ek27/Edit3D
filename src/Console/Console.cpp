@@ -67,10 +67,10 @@ void Console::Draw() {
 			}
 
 
-			//if (scrollToBottom) {
+			if (scrollToBottom) {
 				ImGui::SetScrollHereY(1.0f);
-				//scrollToBottom = false
-			//}
+				scrollToBottom = false;
+			}
 		ImGui::EndChild();
 
 		ImGui::SetCursorPosY(120);
@@ -80,8 +80,8 @@ void Console::Draw() {
 		ImGui::SetNextItemWidth(-1);
 		if (ImGui::InputText("##Input", &m_Buffer, inputTextFlags, &Console::TextCallbackStub, (void*)this)) {
 			if (m_Buffer != "") {
-				std::cout << m_Buffer << std::endl;	
 				history.push_back(m_Buffer);
+				scrollToBottom = true;
 
 				if (!m_Buffer.empty()) {
 					currentHistory = history.size();

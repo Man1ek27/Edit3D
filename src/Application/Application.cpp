@@ -5,7 +5,7 @@
 #include "Cone.h"
 #include "Cylinder.h"
 
-Application::Application() : Application(1920, 1280, "Edit3D") {
+Application::Application() : Application(1400, 200, "Edit3D") {
 }
 
 Application::Application(unsigned int width, unsigned int height, sf::String title)

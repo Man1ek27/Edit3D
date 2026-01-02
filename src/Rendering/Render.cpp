@@ -1,7 +1,7 @@
 #include "Render.h"
 
 Renderer3D::Renderer3D()
-    : rotationX(148.0f), rotationY(128.0f), zoom(0.5f), viewportSize(ImVec2(400, 400)),
+    : rotationX(148.0f), rotationY(128.0f), zoom(0.2f), viewportSize(ImVec2(400, 400)),
 
     // inicjalizacja views
     views{ {
@@ -17,28 +17,6 @@ Renderer3D::Renderer3D()
 }
 
 
-// Funkcja do rzutowania 3D na 2D
-ImVec2 Renderer3D::project3DTo2D(const ImVec3& point, const ImVec2& center, float scale) {
-    // Proste rzutowanie perspektywiczne
-    float factor = 2.0f / (2.0f + point.z * zoom);
-    float x = point.x * factor * scale;
-    float y = point.y * factor * scale;
-
-    return ImVec2(center.x + x, center.y - y); // Oœ Y jest odwrócona w oknie
-}
-
- //Funkcja do obracania punktu 3D
-ImVec3 Renderer3D::rotatePoint(const ImVec3& point, float rotX, float rotY) {
-    // U¿yj macierzy zamiast rêcznych obliczeñ
-    Matrix4x4 rotYMat = Matrix4x4::RotationY(rotY);
-    Matrix4x4 rotXMat = Matrix4x4::RotationX(rotX);
-
-    // Kolejnoœæ: najpierw Y, potem X (jak w oryginalnym kodzie)
-    Matrix4x4 combinedRot = rotYMat.Multiply(rotXMat);
-
-    return combinedRot.TransformPoint(point);
-}
-
 void Renderer3D::handleViewportInteraction() {
     //INFO: Funkcja zwi¹zana z ruszaniem myszk¹ i zoomowaniem za pomoc¹ myszki.
 
@@ -48,12 +26,6 @@ void Renderer3D::handleViewportInteraction() {
             rotationY += delta.x * 0.5f;
             rotationX += delta.y * 0.5f;
             ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
-        }
-
-        float wheel = ImGui::GetIO().MouseWheel;
-        if (wheel != 0) {
-            zoom += wheel * 0.1f;
-            zoom = std::max(0.1f, std::min(zoom, 3.0f));
         }
     }
 }
@@ -90,7 +62,8 @@ void Renderer3D::Draw3DView(const std::vector<std::unique_ptr<SceneObject>>& obj
         ImVec2 viewportPos = ImGui::GetCursorScreenPos();
         ImVec2 center(viewportPos.x + viewportSize.x * 0.5f,
             viewportPos.y + viewportSize.y * 0.5f);
-        float scale = std::min(viewportSize.x, viewportSize.y) * 0.2f;
+        //INFO: Tutaj kontrolujemy, jak "daleko" jest kamera.
+        float scale = std::min(viewportSize.x, viewportSize.y) * 0.15f;
 
         // Rysowanie obiektów z przekazanego wektora
         for (const auto& obj : objects) {

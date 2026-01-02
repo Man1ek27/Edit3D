@@ -28,6 +28,9 @@ public:
         float cam_rotX, float cam_rotY, float cam_zoom,
         bool show_vertices = true, bool show_edges = true) const = 0;
 
+    static ImVec2 ProjectPoint(const ImVec3& point, const ImVec2& center, float scale, float zoom);
+    static ImVec3 RotateCameraPoint(const ImVec3& point, float rotX, float rotY);
+
     // Metoda do transformacji punktu lokalnego do œwiata
     virtual ImVec3 TransformPoint(const ImVec3& local_point) const;
 

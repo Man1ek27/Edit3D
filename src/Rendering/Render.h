@@ -17,11 +17,7 @@ public:
 
 
 private:
-    ImVec2 project3DTo2D(const ImVec3& point, const ImVec2& center, float scale);
-    ImVec3 rotatePoint(const ImVec3& point, float rotX, float rotY);
     void handleViewportInteraction();
-
-
     ImVec2 viewportSize;
     ImVec2 singleViewSize;
 

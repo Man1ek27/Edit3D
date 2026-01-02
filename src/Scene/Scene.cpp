@@ -69,14 +69,32 @@ void Scene::MoveObject(unsigned int objectId, ImVec3& newPos) {
 
 void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) { // - TO DO - tu przeba to jakoœ ³adnie zrobiæ bo mamy rotowaæ wzglêdem punktu poin o k¹ty newRot(alfa, beta, delta)
     auto result = this->indexFromId(objectId);
-    ImVec3 oldRot = objects[result.value()]->GetRotation();
-    if (result.has_value()) {
-        objects[result.value()]->SetPosition(ImVec3(oldRot.x + newRot.x, oldRot.y + newRot.y, oldRot.z + newRot.z));
-        objects[result.value()]->reloadCommandRecord();
-    }
-    else {
+    if (!result.has_value()) {
         std::cout << "Error no object with this id" << std::endl;
+        return;
     }
+
+    auto& obj = objects[result.value()];
+
+    // 1) Zaktualizuj rotacjê obiektu (dodaj delta)
+    ImVec3 oldRot = obj->GetRotation();
+    ImVec3 updatedRot(oldRot.x + newRot.x, oldRot.y + newRot.y, oldRot.z + newRot.z);
+    obj->SetRotation(updatedRot);
+
+    // 2) Przesuñ obiekt tak, aby by³ obrócony wokó³ zadanego punktu `point`
+    //    (we treat `point` as punkt w przestrzeni œwiata)
+    ImVec3 oldPos = obj->GetPosition();
+    ImVec3 relative{ oldPos.x - point.x, oldPos.y - point.y, oldPos.z - point.z };
+
+    // U¿yj macierzy obrotu; RotationEuler wewnêtrznie dzia³a tak, jak w innych miejscach projektu.
+    Matrix4x4 rotMat = Matrix4x4::RotationEuler(newRot.x, newRot.y, newRot.z);
+    ImVec3 rotated = rotMat.TransformPoint(relative);
+
+    ImVec3 newPos{ point.x + rotated.x, point.y + rotated.y, point.z + rotated.z };
+    obj->SetPosition(newPos);
+
+    // Odœwie¿ zapis komendy w rejestratorze
+    obj->reloadCommandRecord();
 }
 
 void Scene::SaveToFile(const std::string& filename) {

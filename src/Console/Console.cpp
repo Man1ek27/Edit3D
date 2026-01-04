@@ -55,7 +55,7 @@ int Console::serviceTextInputData(ImGuiInputTextCallbackData* data) {
 
 void Console::Draw() {
 	ImGui::SetNextWindowSize(ImVec2(1620, 160), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowPos(ImVec2(0, 800));
+	ImGui::SetNextWindowPos(ImVec2(0, 850));
 	ImGui::Begin(NAME,  nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 	
 		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -40), false, ImGuiWindowFlags_HorizontalScrollbar);

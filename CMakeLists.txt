@@ -36,7 +36,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/SFML/imgui-sfml.git
   GIT_TAG master
 )
-# klucz! zapewnij ścieżkę do ImGui
+# klucz
 set(IMGUI_DIR ${imgui_SOURCE_DIR})
 set(IMGUI_SFML_FIND_SFML OFF) # wymuś brak find_package
 
@@ -50,7 +50,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nlohmann_json)
 # --------------------------------------------------------------
-# Twój program
+# Program
 # --------------------------------------------------------------
 add_executable(MyApp src/main.cpp
     src/Application/Application.cpp  
@@ -86,7 +86,7 @@ target_include_directories(MyApp PRIVATE
     src/Scene
     src/Console
     ${imgui_SOURCE_DIR}   # do nagłówków ImGui
-    ${imgui_sfml_SOURCE_DIR}  # jeśli będziesz używać bezpośrednich nagłówków ImGui-SFML
+    ${imgui_sfml_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/misc/cpp
 )
 

@@ -1,0 +1,31 @@
+# Polecenia do testowania w edytorze.
+
+set_line_color (255,0,0)
+
+# Dodawanie obiektow.
+
+line (0,0,0),(3,0,0)
+sphere (1,1,1),2,(20,20)
+box (-2,-2,-2),(2,2,2)
+cylinder (0,0,0),(0,3,0),1,16
+cone (0,0,0),1,(0,3,0),0,16
+
+# Usuwanie.
+
+delete 2
+clear_all
+
+# Transformacje.
+
+move 2 (1,0,0)
+rotate 3,(0,0,0),(45,45,0)
+
+# Zapis do pliku.
+
+save full_scene
+
+# Tutaj sprawdzamy b³êdne polecenia.
+
+sphere (0,0),2
+rotate 99,(0,0,0),(10,10,10)
+unknown_command

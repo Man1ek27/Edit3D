@@ -67,7 +67,7 @@ void Scene::MoveObject(unsigned int objectId, ImVec3& newPos) {
     }
 }
 
-void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) { // - TO DO - tu przeba to jakoœ ³adnie zrobiæ bo mamy rotowaæ wzglêdem punktu poin o k¹ty newRot(alfa, beta, delta)
+void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) {
     auto result = this->indexFromId(objectId);
     if (!result.has_value()) {
         std::cout << "Error no object with this id" << std::endl;

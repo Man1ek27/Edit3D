@@ -1,6 +1,6 @@
 #include "Application.h"
 
-int main() {
+int WinMain() {
     Application app(1620, 1010);
 
     app.run();

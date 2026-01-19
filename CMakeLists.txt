@@ -52,7 +52,7 @@ FetchContent_MakeAvailable(nlohmann_json)
 # --------------------------------------------------------------
 # Program
 # --------------------------------------------------------------
-add_executable(MyApp src/main.cpp
+add_executable(MyApp WIN32 src/main.cpp
     src/Application/Application.cpp  
       
     src/Commands/CommandParser.cpp  

@@ -24,7 +24,6 @@ std::string CommandParser::parse(std::string& fullCommand) {
 
 	std::string commandStr;
 	if (!(ss >> commandStr)) {
-		std::cout << "ERROR: No Command detected. Available commands: SET_LINE_COLOR, LINE, BOX, SPHERE, CONE, CYLINDER, DELETE, CLEAR_ALL, SAVE, LOAD" << std::endl;
 		return "";
 	}
 	command = stringToEnum(commandStr);
@@ -355,7 +354,6 @@ CommandParser::commandType CommandParser::stringToEnum(std::string& commandStr){
 }
 
 
-// tutaj w ka¿dym case mo¿esz napisaæ tworzenie obiektów 
 
 void CommandParser::execute() {
 
@@ -363,9 +361,6 @@ void CommandParser::execute() {
 		case SET_LINE_COLOR: {
 			if (args.size() >= 3) {
 				color = ImColor(args[0], args[1], args[2]);
-				std::cout << "R: " << color.Value.x
-					<< " G: " << color.Value.y
-					<< " B: " << color.Value.z << std::endl;
 			}
 			break;
 		}
@@ -374,11 +369,7 @@ void CommandParser::execute() {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
 
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
-
 				auto line = std::make_unique<Line>("Line",p1, p2);
-				//line->SetPosition(ImVec3(0, 2, 0)); // Przesuniêcie ca³ej linii
 				line->SetEdgeColor(color);
 				line->reloadCommandRecord();
 				scene.AddObject(std::move(line));
@@ -387,19 +378,17 @@ void CommandParser::execute() {
 			}
 			break;
 		}
-		case BOX: {//TO DO !!!!!!!!!! - tzreba zmieniæ tutaj definicjê albo stworzyc konstuktor box który przyjmuje dwa wierzcho³ki
+		case BOX: {
 			if (args.size() >= 6) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
 
-				// Dodaj przyk³adowy Box do sceny przez scene
 				auto box = std::make_unique<Box>("Box", 2.0f); 
+				box->SetEdgeColor(color);
 				box->SetPosition(p1);
 				box->reloadCommandRecord();
 				scene.AddObject(std::move(box));
 
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
 			}
 
 			break;
@@ -414,21 +403,19 @@ void CommandParser::execute() {
 				auto sphere = std::make_unique<Sphere>("Sphere", r);
 				sphere->SetPosition(p0);
 				sphere->SetEdgeColor(color); 
-				sphere->SetVertexColor(color); // !!!!!!!!!!!!!!! TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! NIE wiem które to stack a które to slice
+				sphere->SetVertexColor(color); 
 				sphere->SetSlices(nm.x);
 				sphere->SetStacks(nm.y);
 
 				sphere->reloadCommandRecord();
 				scene.AddObject(std::move(sphere));
 
-				std::cout << "p0(" << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
-				std::cout << "r: " << r << std::endl;
-				std::cout << "n: " << nm.x << " m:" << nm.y << std::endl;
+
 			}
 
 			break;
 		}
-		case CONE: { // TO DO podbnie jak w box - trzeba z danych które tu s¹ utworzyæ konstruktor 
+		case CONE: {
 			if (args.size() >= 9) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				float r1 = args[3];
@@ -445,16 +432,12 @@ void CommandParser::execute() {
 				cone->reloadCommandRecord();
 				scene.AddObject(std::move(cone));
 
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "r1" << r1 << std::endl;
-				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
-				std::cout << "r2: " << r2 << std::endl;
-				std::cout << "n: " << n << std::endl;
+
 			}
 
 			break;
 		}
-		case CYLINDER: { // TO DO - i tu tak samo - jakiœ konstrukotr najlepiej pasuj¹cy do tych danych albo odpowiednie settery 
+		case CYLINDER: {
 			if (args.size() >= 8) {
 				ImVec3 p1(args[0], args[1], args[2]);
 				ImVec3 p2(args[3], args[4], args[5]);
@@ -469,24 +452,19 @@ void CommandParser::execute() {
 				cylinder->reloadCommandRecord();
 				scene.AddObject(std::move(cylinder));
 
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "p2(" << p2.x << ", " << p2.y << ", " << p2.z << std::endl;
-				std::cout << "r1: " << r << std::endl;
-				std::cout << "n: " << n << std::endl;
+
 			}
 			break;
 		}
 		case DELETE: {
 			if (args.size() >= 1) {
 				int id = args[0];
-				std::cout << "id: " << id << std::endl;
 
 				scene.RemoveObject(id);
 			}
 			break;
 		}
 		case CLEAR_ALL: {
-			std::cout << "clearing all objects ..." << std::endl;
 			scene.ClearObjects();
 			break;
 		}
@@ -495,8 +473,7 @@ void CommandParser::execute() {
 				int id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
 
-				std::cout << "id: " << id << std::endl;
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
+	
 
 				scene.MoveObject(id, p1);
 
@@ -504,15 +481,13 @@ void CommandParser::execute() {
 			}
 			break;
 		}
-		case ROTATE: { // TO DO 
+		case ROTATE: {
 			if (args.size() >= 7) {
 				float id = args[0];
 				ImVec3 p1(args[1], args[2], args[3]);
 				ImVec3 rot(args[4], args[5], args[6]);
 
-				std::cout << "id: " << id << std::endl;
-				std::cout << "p1(" << p1.x << ", " << p1.y << ", " << p1.z << std::endl;
-				std::cout << "p2(" << rot.x << ", " << rot.y << ", " << rot.z << std::endl;
+
 
 				scene.RotateObject(id, p1, rot);
 			}
@@ -521,7 +496,6 @@ void CommandParser::execute() {
 		case SAVE: { // TO DO 
 			if (args.size() >= 1) {
 				filename = args[0];
-				std::cout << "name: " << filename << std::endl; 
 			}
 			std::string fullPath = filename + ".json";
 			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
@@ -534,7 +508,6 @@ void CommandParser::execute() {
 		case LOAD: { // TO DO 
 			if (args.size() >= 1) {
 				filename = args[0];
-				std::cout << "name: " << filename << std::endl;
 			}
 			std::string fullPath = filename + ".json";
 			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
@@ -545,7 +518,6 @@ void CommandParser::execute() {
 			break;
 		}
 		case UNKNOWN:
-			std::cout << "ERROR" <<std::endl;
 			break;
 
 	}

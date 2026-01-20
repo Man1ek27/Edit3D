@@ -493,24 +493,22 @@ void CommandParser::execute() {
 			}
 			break;
 		}
-		case SAVE: { // TO DO 
+		case SAVE: {
 			if (args.size() >= 1) {
 				filename = args[0];
 			}
 			std::string fullPath = filename + ".json";
-			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
 			std::transform(fullPath.begin(), fullPath.end(), fullPath.begin(),
 				[](unsigned char c) { return std::tolower(c); });
 
 			scene.SaveToFile(fullPath);
 			break;
 		}
-		case LOAD: { // TO DO 
+		case LOAD: { 
 			if (args.size() >= 1) {
 				filename = args[0];
 			}
 			std::string fullPath = filename + ".json";
-			//  Zamieñ ka¿dy znak w stringu na ma³¹ literê
 			std::transform(fullPath.begin(), fullPath.end(), fullPath.begin(),
 				[](unsigned char c) { return std::tolower(c); });
 

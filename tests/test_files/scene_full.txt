@@ -1,31 +1,84 @@
-# Polecenia do testowania w edytorze.
+﻿# 1. Testy parsera poleceń – poprawne komendy
 
 set_line_color (255,0,0)
-
-# Dodawanie obiektow.
+set_vertex_color (0,0,255)
 
 line (0,0,0),(3,0,0)
-sphere (1,1,1),2,(20,20)
+line (0,0,0),(0,3,0)
+sphere (1,1,1),2,(16,12)
+sphere (-3,0,0),1.5,(20,16)
 box (-2,-2,-2),(2,2,2)
+box (3,3,0),(1,1,1)
 cylinder (0,0,0),(0,3,0),1,16
+cylinder (2,0,0),(0,2,0),0.5,12
 cone (0,0,0),1,(0,3,0),0,16
+cone (-3,0,0),0.5,(0,2,0),0,12
 
-# Usuwanie.
 
+# 2. Testy zarządzania obiektami
+
+# Usuwanie obiektu po ID
 delete 2
+
+# Ponowne dodanie obiektów
+line (1,1,1),(2,2,2)
+sphere (0,0,0),1,(12,10)
+
+# Czyszczenie całej sceny
 clear_all
 
-# Transformacje.
+# Sprawdzenie dodawania po czyszczeniu
+box (0,0,0),(2,2,2)
+sphere (2,0,0),1,(16,12)
 
-move 2 (1,0,0)
-rotate 3,(0,0,0),(45,45,0)
 
-# Zapis do pliku.
+# 3. Testy transformacji obiektów
 
-save full_scene
+# Przesuwanie obiektów
+move 1 (1,0,0)
+move 1 (0,1,0)
+move 2 (-1,0,0)
 
-# Tutaj sprawdzamy b��dne polecenia.
+# Obrót obiektu wokół punktu
+rotate 1,(0,0,0),(45,0,0)
+rotate 1,(0,0,0),(0,45,0)
+rotate 2,(1,1,1),(0,0,90)
 
+
+# 4. Testy powiązań modułów (parser → scena → renderer)
+
+# Zmiana kolorów 
+set_line_color (0,255,0)
+set_vertex_color (255,0,0)
+
+line (0,0,0),(0,0,3)
+sphere (0,2,0),1,(20,16)
+box (-2,0,0),(1,1,1)
+
+
+# 5. Testy zapisu i odczytu danych
+
+save full_scene_test
+
+clear_all
+
+load full_scene_test
+
+
+#6. Testy - błędne dane wejściowe
+
+# Błędna liczba parametrów
 sphere (0,0),2
+
+# Nieistniejące ID
 rotate 99,(0,0,0),(10,10,10)
+move 99 (1,1,1)
+
+# Nieznana komenda
 unknown_command
+
+# Błędny typ danych
+box (a,b,c),(1,1,1)
+
+# Błędny format
+line 0,0,0 1,1,1

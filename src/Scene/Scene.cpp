@@ -63,30 +63,25 @@ void Scene::MoveObject(unsigned int objectId, ImVec3& newPos) {
         objects[result.value()]->reloadCommandRecord();
     }
     else {
-        std::cout << "Error no object with this id" << std::endl;
     }
 }
 
 void Scene::RotateObject(unsigned int objectId, ImVec3& point, ImVec3& newRot) {
     auto result = this->indexFromId(objectId);
     if (!result.has_value()) {
-        std::cout << "Error no object with this id" << std::endl;
         return;
     }
 
     auto& obj = objects[result.value()];
 
-    // 1) Zaktualizuj rotacjê obiektu (dodaj delta)
     ImVec3 oldRot = obj->GetRotation();
     ImVec3 updatedRot(oldRot.x + newRot.x, oldRot.y + newRot.y, oldRot.z + newRot.z);
     obj->SetRotation(updatedRot);
 
-    // 2) Przesuñ obiekt tak, aby by³ obrócony wokó³ zadanego punktu `point`
-    //    (we treat `point` as punkt w przestrzeni œwiata)
+
     ImVec3 oldPos = obj->GetPosition();
     ImVec3 relative{ oldPos.x - point.x, oldPos.y - point.y, oldPos.z - point.z };
 
-    // U¿yj macierzy obrotu; RotationEuler wewnêtrznie dzia³a tak, jak w innych miejscach projektu.
     Matrix4x4 rotMat = Matrix4x4::RotationEuler(newRot.x, newRot.y, newRot.z);
     ImVec3 rotated = rotMat.TransformPoint(relative);
 
@@ -126,10 +121,8 @@ void Scene::SaveToFile(const std::string& filename) {
     std::ofstream file(filename);
     if (file.is_open()) {
         file << sceneJson.dump(4); // Pretty print z 4 spacjami wciêcia
-        std::cout << "Scene saved to " << filename << " with " << objects.size() << " objects." << std::endl;
     }
     else {
-        std::cerr << "Error: Could not open file " << filename << " for writing." << std::endl;
     }
 }
 
@@ -164,7 +157,6 @@ void Scene::LoadFromFile(const std::string& filename) {
                 }
             }
 
-            std::cout << "Scene loaded from " << filename << " with " << objects.size() << " objects." << std::endl;
         }
     }
     catch (const json::exception& e) {
